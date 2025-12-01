@@ -9,96 +9,163 @@
   <% const showSearch = false; const showNavLinks = false; %>
   <%- include('partials/nav', { user, showSearch, showNavLinks }) %>
   <% const recentOrdersList = (typeof recentOrders !== 'undefined' && Array.isArray(recentOrders)) ? recentOrders : []; %>
+  <% const sales = (typeof salesOverview !== 'undefined') ? salesOverview : null; %>
+  <% const dash = (typeof dashboardStats !== 'undefined') ? dashboardStats : null; %>
+
   <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+      <h1 class="fw-bold mb-0">Admin Dashboard</h1>
+      <span class="badge bg-secondary text-uppercase">Admin</span>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm border-0" style="background:#b7e38a; color:#2f4d1f;">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">Manage Inventory</h5>
+            </div>
+            <a href="/inventory" class="btn btn-dark mt-auto">Go to Inventory</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm border-0" style="background:#b7e38a; color:#2f4d1f;">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">Manage Users</h5>
+            </div>
+            <a href="/admin/users" class="btn btn-dark mt-auto">Go to Users</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12">
+        <div class="card h-100 shadow-sm border-0" style="background:#b7e38a; color:#2f4d1f;">
+          <div class="card-body">
+            <h5 class="mb-3">Dashboard Statistics</h5>
+            <div class="d-flex flex-column gap-2">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Total Sales</span>
+                <span class="fw-semibold">S$<%= Number((dash && dash.totalSales) || 0).toFixed(2) %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Total Orders</span>
+                <span class="fw-semibold"><%= (dash && dash.totalOrders) || 0 %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Total Product in Stock</span>
+                <span class="fw-semibold"><%= (dash && dash.totalStock) || 0 %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Low Stock Items</span>
+                <span class="fw-semibold"><%= (dash && dash.lowStock) || 0 %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Delivered / Completed</span>
+                <span class="fw-semibold"><%= (dash && dash.deliveredCompleted) || 0 %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% if (sales) { %>
+    <div class="row g-4 mt-1">
+      <div class="col-lg-12">
         <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <h1 class="text-center fw-bold mb-4">Admin Dashboard</h1>
-            <div class="row g-4 justify-content-center">
-              <div class="col-sm-6">
-                <a href="/inventory" class="text-decoration-none">
-                  <div class="card h-100 border-0 shadow-sm" style="background:#b7e38a; color:#2f4d1f;">
-                    <div class="card-body d-flex align-items-center justify-content-center" style="height:180px;">
-                      <span class="fw-bold fs-4">Inventory</span>
-                    </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">Sales Overview</h5>
+              <% if (sales.lastOrderAt) { %>
+                <small class="text-muted">Last order: <%= new Date(sales.lastOrderAt).toLocaleString('en-SG', { hour12: false }) %></small>
+              <% } %>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="text-muted text-uppercase small mb-1">Revenue (recent)</div>
+                    <div class="fs-3 fw-bold">S$<%= Number(sales.revenue || 0).toFixed(2) %></div>
                   </div>
-                </a>
+                </div>
               </div>
-              <div class="col-sm-6">
-                <a href="/admin/users" class="text-decoration-none">
-                  <div class="card h-100 border-0 shadow-sm" style="background:#b7e38a; color:#2f4d1f;">
-                    <div class="card-body d-flex align-items-center justify-content-center" style="height:180px;">
-                      <span class="fw-bold fs-4">Users</span>
-                    </div>
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="text-muted text-uppercase small mb-1">Orders (recent)</div>
+                    <div class="fs-3 fw-bold"><%= sales.totalOrders || 0 %></div>
                   </div>
-                </a>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="text-muted text-uppercase small mb-1">Average Order</div>
+                    <div class="fs-3 fw-bold">S$<%= Number(sales.avgOrder || 0).toFixed(2) %></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <% const sales = (typeof salesOverview !== 'undefined') ? salesOverview : null; %>
-            <% if (sales) { %>
-            <div class="mt-5">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="h5 mb-0">Sales Overview</h2>
-                <% if (sales.lastOrderAt) { %>
-                  <small class="text-muted">Last order: <%= new Date(sales.lastOrderAt).toLocaleString('en-SG', { hour12: false }) %></small>
-                <% } %>
-              </div>
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                      <div class="text-muted text-uppercase small mb-1">Revenue (recent)</div>
-                      <div class="fs-3 fw-bold">S$<%= Number(sales.revenue || 0).toFixed(2) %></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                      <div class="text-muted text-uppercase small mb-1">Orders (recent)</div>
-                      <div class="fs-3 fw-bold"><%= sales.totalOrders || 0 %></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                      <div class="text-muted text-uppercase small mb-1">Average Order</div>
-                      <div class="fs-3 fw-bold">S$<%= Number(sales.avgOrder || 0).toFixed(2) %></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <small class="text-muted d-block mt-2">Based on the most recent <%= (recentOrders && recentOrders.length) || 0 %> orders.</small>
+            <small class="text-muted d-block mt-2">Based on the most recent <%= (recentOrders && recentOrders.length) || 0 %> orders.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-12">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">Recent Orders</h5>
+              <span class="text-muted small">Last <%= recentOrdersList.length %></span>
             </div>
-            <% } %>
-            <div class="mt-5">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="h5 mb-0">Recent Orders</h2>
-                <span class="text-muted small">Last <%= recentOrdersList.length %></span>
-              </div>
-              <% if (recentOrdersList.length) { %>
-                <div class="list-group shadow-sm">
-                  <% recentOrdersList.forEach((order) => { %>
-                    <div class="list-group-item d-flex flex-column flex-lg-row align-items-lg-center gap-2">
+            <% if (recentOrdersList.length) { %>
+              <div class="list-group shadow-sm">
+                <% recentOrdersList.forEach((order) => { %>
+                  <div class="list-group-item">
+                    <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2">
                       <div class="fw-semibold">
-                        Order #<%= order.orderNumber || order.invoiceNumber || '—' %>
+                        Order #<%= order.orderNumber || order.invoiceNumber || '???' %>
                       </div>
                       <div class="text-muted">
                         <%= (order.customer && order.customer.fullName) || 'Customer' %>
                       </div>
+                      <% if (order.customer && order.customer.paymentMethod) { %>
+                        <span class="badge bg-info text-dark text-uppercase"><%= order.customer.paymentMethod %></span>
+                      <% } %>
                       <div class="ms-lg-auto fw-semibold">S$<%= Number(order.total || 0).toFixed(2) %></div>
                       <small class="text-muted">
                         <%= new Date(order.placedAt || order.createdAt || Date.now()).toLocaleString('en-SG', { hour12: false }) %>
                       </small>
                     </div>
-                  <% }); %>
-                </div>
-              <% } else { %>
-                <div class="alert alert-light border">No orders recorded yet.</div>
-              <% } %>
-            </div>
+                    <div class="mt-2 text-muted small">
+                      <% const email = order.customer && order.customer.email; %>
+                      <% const address = order.customer && order.customer.address; %>
+                      <div>Items: <%= (order.cartItems && order.cartItems.length) || 0 %></div>
+                      <% if (email) { %><div>Email: <%= email %></div><% } %>
+                      <% if (address) { %><div>Address: <%= address %></div><% } %>
+                      <% if (order.cartItems && order.cartItems.length) { %>
+                        <div class="mt-1">
+                          <% order.cartItems.slice(0,3).forEach(item => { %>
+                            <div>- <%= item.name %> x <%= item.quantity %> ($<%= Number(item.subtotal || item.price || 0).toFixed(2) %>)</div>
+                          <% }); %>
+                          <% if (order.cartItems.length > 3) { %>
+                            <div>...and <%= order.cartItems.length - 3 %> more</div>
+                          <% } %>
+                        </div>
+                      <% } %>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            <% } else { %>
+              <div class="alert alert-light border mb-0">No orders recorded yet.</div>
+            <% } %>
           </div>
         </div>
       </div>

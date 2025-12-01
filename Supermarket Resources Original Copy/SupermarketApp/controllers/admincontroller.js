@@ -2,6 +2,7 @@
 
 const Admin = require('../models/admin');
 const User = require('../models/User');
+const Supermarket = require('../models/Supermarket');
 const CheckoutController = require('./checkoutcontroller');
 
 function renderAdmin(req, res) {
@@ -11,35 +12,63 @@ function renderAdmin(req, res) {
       req.flash('error', 'Failed to load stats');
       stats = { products: 0, users: 0 };
     }
-    Admin.getRecentProducts(6, (e2, recent) => {
-      if (e2) {
-        console.error('Admin recent products error:', e2);
-        recent = [];
-      }
-      const recentOrders = typeof CheckoutController.getRecentOrders === 'function'
-        ? CheckoutController.getRecentOrders(6)
-        : [];
-      const salesOverview = (() => {
-        const orders = Array.isArray(recentOrders) ? recentOrders : [];
-        const totalOrders = orders.length;
-        const revenue = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
-        const avgOrder = totalOrders ? revenue / totalOrders : 0;
-        const lastOrder = orders[0];
-        const lastOrderAt = lastOrder && (lastOrder.placedAt || lastOrder.createdAt);
-        return {
-          totalOrders,
-          revenue,
-          avgOrder,
-          lastOrderAt
+    // Compute stock totals
+    Supermarket.getAllProducts((prodErr, products) => {
+      if (prodErr) console.error('Admin products error:', prodErr);
+      const totalStock = Array.isArray(products)
+        ? products.reduce((sum, p) => {
+            const stockNum = Number(p.stock ?? p.quantity);
+            return Number.isFinite(stockNum) ? sum + stockNum : sum;
+          }, 0)
+        : 0;
+      const lowStock = Array.isArray(products)
+        ? products.filter(p => {
+            const stockNum = Number(p.stock ?? p.quantity);
+            return Number.isFinite(stockNum) && stockNum > 0 && stockNum <= 5;
+          }).length
+        : 0;
+
+      Admin.getRecentProducts(6, (e2, recent) => {
+        if (e2) {
+          console.error('Admin recent products error:', e2);
+          recent = [];
+        }
+        const recentOrders = typeof CheckoutController.getRecentOrders === 'function'
+          ? CheckoutController.getRecentOrders(6)
+          : [];
+        const salesOverview = (() => {
+          const orders = Array.isArray(recentOrders) ? recentOrders : [];
+          const totalOrders = orders.length;
+          const revenue = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+          const avgOrder = totalOrders ? revenue / totalOrders : 0;
+          const lastOrder = orders[0];
+          const lastOrderAt = lastOrder && (lastOrder.placedAt || lastOrder.createdAt);
+          return {
+            totalOrders,
+            revenue,
+            avgOrder,
+            lastOrderAt
+          };
+        })();
+        const dashboardStats = {
+          products: stats.products,
+          users: stats.users,
+          totalStock,
+          lowStock,
+          totalSales: salesOverview ? salesOverview.revenue : 0,
+          totalOrders: salesOverview ? salesOverview.totalOrders : 0,
+          deliveredCompleted: salesOverview ? salesOverview.totalOrders : 0
         };
-      })();
-      res.render('admin', {
-        user: req.session.user,
-        messages: req.flash(),
-        stats,
-        recent,
-        recentOrders,
-        salesOverview
+
+        res.render('admin', {
+          user: req.session.user,
+          messages: req.flash(),
+          stats,
+          recent,
+          recentOrders,
+          salesOverview,
+          dashboardStats
+        });
       });
     });
   });

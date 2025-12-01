@@ -3,6 +3,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
 const multer = require('multer');
+const MySQLStore = require('express-mysql-session')(session);
+const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
@@ -23,10 +25,26 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Session / flash
+const sessionStore = new MySQLStore({
+  host: process.env.DB_HOST || 'localhost',
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'c372_supermarketdb',
+  clearExpired: true,
+  checkExpirationInterval: 15 * 60 * 1000, // 15 minutes
+  expiration: 24 * 60 * 60 * 1000 // 1 day
+});
+// Clear any persisted sessions on server start so users must log in after a restart
+sessionStore.clear((err) => {
+  if (err) console.error('Failed to clear session store on startup:', err);
+});
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'devsecret',
+  secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: sessionStore
 }));
 app.use(flash());
 

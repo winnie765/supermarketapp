@@ -63,17 +63,30 @@ body.home-page {
   gap: 0.5rem;
   flex-wrap: wrap;
   border-radius: 999px;
-  padding: 0.35rem;
+  padding: 0.22rem 0.3rem;
   background: rgba(255,255,255,0.9);
   width: 100%;
   max-width: 1280px;
   margin: 0 auto 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  justify-content: center;
 }
 .shopping-search-form input,
 .shopping-search-form select {
   min-width: 130px;
-  flex: 1 1 140px;
+  height: 38px;
+  padding: 0.4rem 0.75rem;
+}
+.shopping-search-form input[type="search"] {
+  flex: 1 1 320px;
+  max-width: 520px;
+}
+.shopping-search-form select {
+  flex: 0 1 210px;
+}
+.shopping-search-form .btn-lime {
+  height: 38px;
+  padding: 0.35rem 1.4rem;
 }
 .product-card {
   transition: transform 0.15s ease, box-shadow 0.15s ease;

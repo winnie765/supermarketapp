@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const Supermarket = require('../models/Supermarket');
+const CartModel = require('../models/cart');
 
 // In-memory, user-scoped order history so it survives logout/login (per server run)
 const orderHistoryStore = new Map(); // key => [orders]
@@ -228,6 +229,11 @@ function processCheckout(req, res) {
     recordOrderForUser(req.session.user, orderRecord);
     // keep a global feed for admins
     recordGlobalOrder(orderRecord);
+    if (req.session.user && req.session.user.id) {
+      CartModel.clearUserCart(req.session.user.id, (err) => {
+        if (err) console.error('Failed to clear DB cart after checkout:', err);
+      });
+    }
     req.session.cart = [];
     req.flash('success', `Order placed! An invoice has been generated for ${req.body.email}.`);
 

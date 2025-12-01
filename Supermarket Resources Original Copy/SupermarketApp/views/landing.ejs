@@ -17,8 +17,12 @@
       <p class="eyebrow">Fresh groceries</p>
       <h1>Welcome back!<br><span>Let's restock your pantry</span></h1>
       <div class="hero-actions">
-        <a href="/register" class="btn btn-outline-lime">Register</a>
-        <a href="/login" class="btn btn-outline-lime">Login</a>
+        <% if (user) { %>
+          <a href="/shopping" class="btn btn-lime">Start shopping</a>
+        <% } else { %>
+          <a href="/register" class="btn btn-outline-lime">Register</a>
+          <a href="/login" class="btn btn-outline-lime">Login</a>
+        <% } %>
       </div>
     </div>
     <div class="hero-visual">

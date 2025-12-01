@@ -72,6 +72,124 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'Peter Lim','peter@peter.com','7c4a8d09ca3762af61e59520943dc26494f8941b','Woodlands Ave 2','98765432','admin'),(2,'Mary Tan','mary@mary.com','7c4a8d09ca3762af61e59520943dc26494f8941b','Tampines Ave 1','12345678','user'),(3,'bobochan','bobochan@gmail.com','7c4a8d09ca3762af61e59520943dc26494f8941b','Woodlands','98765432','user'),(4,'sarahlee','sarahlee@gmail.com','7c4a8d09ca3762af61e59520943dc26494f8941b','Woodlands','98765432','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `carts`
+--
+
+DROP TABLE IF EXISTS `carts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `carts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL,
+  `productId` int NOT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_cart_user_product` (`userId`,`productId`),
+  KEY `idx_cart_user` (`userId`),
+  KEY `idx_cart_product` (`productId`),
+  CONSTRAINT `fk_cart_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cart_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `carts`
+--
+
+LOCK TABLES `carts` WRITE;
+/*!40000 ALTER TABLE `carts` DISABLE KEYS */;
+INSERT INTO `carts` (`id`,`userId`,`productId`,`quantity`,`createdAt`) VALUES
+(1,2,1,2,'2025-10-18 12:00:00'),
+(2,4,3,1,'2025-10-19 09:15:00');
+/*!40000 ALTER TABLE `carts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `purchase_history`
+--
+
+DROP TABLE IF EXISTS `purchase_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `purchase_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL,
+  `productId` int NOT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
+  `totalPrice` double(10,2) NOT NULL,
+  `purchasedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_ph_user` (`userId`),
+  KEY `idx_ph_product` (`productId`),
+  CONSTRAINT `fk_ph_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_ph_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Trigger to clear cart entries once purchased
+--
+
+DROP TRIGGER IF EXISTS `trg_purchase_history_clear_cart`;
+DELIMITER $$
+CREATE TRIGGER `trg_purchase_history_clear_cart`
+AFTER INSERT ON `purchase_history`
+FOR EACH ROW
+BEGIN
+  DELETE FROM `carts`
+  WHERE `userId` = NEW.`userId`
+    AND `productId` = NEW.`productId`;
+END$$
+DELIMITER ;
+
+--
+-- Dumping data for table `purchase_history`
+--
+
+LOCK TABLES `purchase_history` WRITE;
+/*!40000 ALTER TABLE `purchase_history` DISABLE KEYS */;
+INSERT INTO `purchase_history` (`id`,`userId`,`productId`,`quantity`,`totalPrice`,`purchasedAt`) VALUES
+(1,2,1,2,3.00,'2025-10-10 10:00:00'),
+(2,4,4,1,1.80,'2025-10-11 15:45:00');
+/*!40000 ALTER TABLE `purchase_history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reviews`
+--
+
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reviews` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL,
+  `productId` int NOT NULL,
+  `rating` tinyint unsigned NOT NULL,
+  `comment` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_review_user` (`userId`),
+  KEY `idx_review_product` (`productId`),
+  CONSTRAINT `fk_review_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_review_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reviews`
+--
+
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+INSERT INTO `reviews` (`id`,`userId`,`productId`,`rating`,`comment`,`createdAt`) VALUES
+(1,2,1,5,'Crisp and fresh.','2025-10-12 09:00:00'),
+(2,4,3,4,'Great with cereal.','2025-10-13 18:30:00');
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

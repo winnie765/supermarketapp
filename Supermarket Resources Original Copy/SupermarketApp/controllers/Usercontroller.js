@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const CartModel = require('../models/cart');
 
 function renderRegister(req, res) {
   res.render('register', { 
@@ -68,8 +69,16 @@ function login(req, res) {
 
       User.findByEmail(email, (_, fresh) => {
         req.session.user = fresh || user;
-        req.session.cart = req.session.cart || [];
-        res.redirect('/home');
+        if (req.session.user && req.session.user.id) {
+          CartModel.getUserCart(req.session.user.id, (err, items) => {
+            if (err) console.error('Load cart on login failed:', err);
+            req.session.cart = Array.isArray(items) ? items : [];
+            return req.session.save(() => res.redirect('/home'));
+          });
+        } else {
+          req.session.cart = req.session.cart || [];
+          res.redirect('/home');
+        }
       });
     });
   });

@@ -2,6 +2,7 @@
 
 const Admin = require('../models/admin');
 const User = require('../models/User');
+const CheckoutController = require('./checkoutcontroller');
 
 function renderAdmin(req, res) {
   Admin.getStats((err, stats) => {
@@ -15,11 +16,30 @@ function renderAdmin(req, res) {
         console.error('Admin recent products error:', e2);
         recent = [];
       }
+      const recentOrders = typeof CheckoutController.getRecentOrders === 'function'
+        ? CheckoutController.getRecentOrders(6)
+        : [];
+      const salesOverview = (() => {
+        const orders = Array.isArray(recentOrders) ? recentOrders : [];
+        const totalOrders = orders.length;
+        const revenue = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+        const avgOrder = totalOrders ? revenue / totalOrders : 0;
+        const lastOrder = orders[0];
+        const lastOrderAt = lastOrder && (lastOrder.placedAt || lastOrder.createdAt);
+        return {
+          totalOrders,
+          revenue,
+          avgOrder,
+          lastOrderAt
+        };
+      })();
       res.render('admin', {
         user: req.session.user,
         messages: req.flash(),
         stats,
-        recent
+        recent,
+        recentOrders,
+        salesOverview
       });
     });
   });

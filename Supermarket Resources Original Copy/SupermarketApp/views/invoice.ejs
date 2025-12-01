@@ -103,12 +103,18 @@
               <th class="text-end">$<%= subtotal.toFixed(2) %></th>
             </tr>
             <tr>
-              <th colspan="3" class="text-end text-muted">Shipping</th>
-              <th class="text-end text-muted">$<%= shipping.toFixed(2) %></th>
+              <% 
+                const hasGst = (typeof gst !== 'undefined');
+                const gstNum = hasGst ? Number(gst) : NaN;
+                const gstValue = Number.isFinite(gstNum) ? gstNum : (Number(subtotal) * 0.09);
+              %>
+              <th colspan="3" class="text-end text-muted">GST (9%)</th>
+              <th class="text-end text-muted">$<%= gstValue.toFixed(2) %></th>
             </tr>
             <tr class="table-success">
               <th colspan="3" class="text-end">Total</th>
-              <th class="text-end">$<%= total.toFixed(2) %></th>
+              <% const totalValue = Number(subtotal) + Number(gstValue); %>
+              <th class="text-end">$<%= totalValue.toFixed(2) %></th>
             </tr>
           </tfoot>
         </table>

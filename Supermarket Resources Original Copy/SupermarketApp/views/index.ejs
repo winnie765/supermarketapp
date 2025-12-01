@@ -11,7 +11,7 @@
 </head>
   <body class="home-page">
   <% const isAdmin = user && user.role === 'admin'; %>
-  <%- include('partials/nav', { user }) %>
+  <%- include('partials/nav', { user, showNavLinks: false }) %>
 
   <% if (!isAdmin) { %>
     <section class="hero container">

@@ -1,8 +1,37 @@
 'use strict';
+const fs = require('fs');
+const path = require('path');
 const Supermarket = require('../models/Supermarket');
 
 // In-memory, user-scoped order history so it survives logout/login (per server run)
 const orderHistoryStore = new Map(); // key => [orders]
+const globalOrderFeed = []; // latest orders across all users
+const feedFile = path.join(__dirname, '..', 'orders-feed.json');
+
+function loadFeedFromDisk() {
+  try {
+    if (fs.existsSync(feedFile)) {
+      const raw = fs.readFileSync(feedFile, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        globalOrderFeed.splice(0, globalOrderFeed.length, ...parsed.slice(0, 50));
+      }
+    }
+  } catch (err) {
+    console.warn('Could not load orders feed:', err.message);
+  }
+}
+
+function persistFeed() {
+  try {
+    fs.writeFile(feedFile, JSON.stringify(globalOrderFeed.slice(0, 50), null, 2), () => {});
+  } catch (err) {
+    console.warn('Could not save orders feed:', err.message);
+  }
+}
+
+// warm the feed on startup
+loadFeedFromDisk();
 
 function userHistoryKey(user) {
   if (!user) return null;
@@ -17,10 +46,45 @@ function recordOrderForUser(user, order) {
   orderHistoryStore.set(key, existing.slice(0, 20));
 }
 
+function recordGlobalOrder(order) {
+  if (!order) return;
+  globalOrderFeed.unshift(order);
+  if (globalOrderFeed.length > 50) globalOrderFeed.length = 50;
+  persistFeed();
+}
+
 function getHistoryForUser(user, fallbackSessionHistory) {
   const key = userHistoryKey(user);
   if (!key) return fallbackSessionHistory || [];
   return orderHistoryStore.get(key) || fallbackSessionHistory || [];
+}
+
+function getRecentOrders(limit = 5) {
+  const safeLimit = Number.isFinite(Number(limit)) ? Number(limit) : 5;
+  const combined = [...globalOrderFeed];
+
+  // include any per-user histories to avoid missing orders if the global feed was empty when they were recorded
+  orderHistoryStore.forEach((orders) => {
+    if (Array.isArray(orders)) combined.push(...orders);
+  });
+
+  // de-duplicate by invoice/order number
+  const seen = new Set();
+  const unique = combined.filter((order) => {
+    const key = order && (order.invoiceNumber || order.orderNumber || order.id);
+    if (!key) return false;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  unique.sort((a, b) => {
+    const timeA = new Date(a.placedAt || a.createdAt || 0).getTime();
+    const timeB = new Date(b.placedAt || b.createdAt || 0).getTime();
+    return timeB - timeA;
+  });
+
+  return unique.slice(0, safeLimit);
 }
 
 function getCartItems(req) {
@@ -60,10 +124,11 @@ function getCartItems(req) {
 }
 
 function calculateTotals(cartItems) {
-  const subtotal = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0);
+  const gst = Number((subtotal * 0.09).toFixed(2)); // 9% GST rounded to cents
   const shipping = 0;
-  const total = subtotal + shipping;
-  return { subtotal, shipping, total };
+  const total = subtotal + gst + shipping;
+  return { subtotal, gst, shipping, total };
 }
 
 function buildPayNowPayload({ invoiceNumber, total, customer }) {
@@ -161,6 +226,8 @@ function processCheckout(req, res) {
     req.session.orderHistory = history.slice(0, 20);
     // also keep a per-user record that survives logout/login for the same account
     recordOrderForUser(req.session.user, orderRecord);
+    // keep a global feed for admins
+    recordGlobalOrder(orderRecord);
     req.session.cart = [];
     req.flash('success', `Order placed! An invoice has been generated for ${req.body.email}.`);
 
@@ -230,6 +297,7 @@ function renderInvoice(req, res) {
   const fallbackTotals = calculateTotals(order.cartItems);
   const totals = {
     subtotal: Number(order.subtotal) || fallbackTotals.subtotal,
+    gst: Number.isFinite(Number(order.gst)) ? Number(order.gst) : fallbackTotals.gst,
     shipping: Number(order.shipping) || 0,
     total: Number(order.total) || fallbackTotals.total
   };
@@ -264,5 +332,6 @@ module.exports = {
   renderPayNow,
   renderInvoice,
   renderOrderHistory,
-  viewOrderFromHistory
+  viewOrderFromHistory,
+  getRecentOrders
 };

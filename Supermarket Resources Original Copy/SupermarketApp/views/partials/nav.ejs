@@ -1,41 +1,44 @@
 <link rel="stylesheet" href="/style.css">
 <nav class="navbar navbar-expand-lg navbar-dark navbar-lime">
+  <% const navLinksEnabled = typeof showNavLinks === 'undefined' ? true : showNavLinks; %>
+  <% const isAdmin = user && user.role === 'admin'; %>
   <div class="container-fluid">
-    <% const navLinksEnabled = typeof showNavLinks === 'undefined' ? true : showNavLinks; %>
-    <% const isAdmin = user && user.role === 'admin'; %>
-    <% if (user) { %>
+    <% if (navLinksEnabled && user) { %>
       <span class="navbar-brand">
         Welcome back, <strong><%= user.username || user.email || 'User' %></strong>
       </span>
     <% } else { %>
       <a class="navbar-brand" href="/">Supermarket App</a>
     <% } %>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <% if (!isAdmin && (user || navLinksEnabled)) { %>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
-        <% if (user && user.role === 'admin') { %>
-          <li class="nav-item"><a class="nav-link" href="/inventory">Inventory</a></li>
-          <li class="nav-item"><a class="nav-link" href="/admin/users">Users</a></li>
-        <% } else { %>
+    <% if (navLinksEnabled) { %>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <% if (!isAdmin) { %>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
           <li class="nav-item"><a class="nav-link" href="/orders">Order History</a></li>
+        </ul>
         <% } %>
-      </ul>
-      <% } %>
-      <% if (user) { %>
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item d-flex align-items-center me-2">
-          <span class="badge bg-light text-dark text-capitalize"><%= user.role || 'user' %></span>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
-        </li>
-      </ul>
-      <% } %>
-    </div>
+        <% if (user) { %>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item d-flex align-items-center me-2">
+            <span class="badge bg-light text-dark text-capitalize"><%= user.role || 'user' %></span>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+          </li>
+        </ul>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (!navLinksEnabled && user) { %>
+      <div class="d-flex align-items-center ms-auto gap-2">
+        <span class="badge bg-light text-dark text-capitalize"><%= user.role || 'user' %></span>
+        <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+      </div>
+    <% } %>
   </div>
 </nav>

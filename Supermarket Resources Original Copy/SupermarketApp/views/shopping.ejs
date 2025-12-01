@@ -61,23 +61,25 @@
                 <span class="stock-badge <%= isOutOfStock ? 'stock-out' : '' %>"><%= stockLabel %></span>
               </div>
               <form action="/add-to-cart/<%= product.id %>" method="post" class="mt-3">
-                <div class="d-flex align-items-center justify-content-between gap-2">
+                <div class="d-flex align-items-center justify-content-between gap-3">
                   <span class="fw-semibold text-success">$<%= Number(product.price).toFixed(2) %></span>
                   <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="-1" <%= isOutOfStock ? 'disabled' : '' %>>-</button>
                     <input
                       type="number"
                       name="quantity"
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm text-center qty-input"
                       value="1"
                       min="1"
                       <%= stockCount > 0 ? `max=\"${stockCount}\"` : '' %>
                       <%= isOutOfStock ? 'disabled' : '' %>
-                      style="width: 85px;"
+                      style="width: 70px;"
                     >
-                    <button class="btn btn-lime <%= isOutOfStock ? 'btn-disabled' : '' %>" <%= isOutOfStock ? 'disabled' : '' %>>
-                      <%= isOutOfStock ? 'Unavailable' : 'Add' %>
-                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="1" <%= isOutOfStock ? 'disabled' : '' %>>+</button>
                   </div>
+                  <button class="btn btn-lime <%= isOutOfStock ? 'btn-disabled' : '' %>" <%= isOutOfStock ? 'disabled' : '' %>>
+                    <%= isOutOfStock ? 'Unavailable' : 'Add' %>
+                  </button>
                 </div>
               </form>
             </div>
@@ -86,5 +88,27 @@
       <% }) %>
     </div>
   </section>
+  <script>
+    (function() {
+      const forms = document.querySelectorAll('form[action^="/add-to-cart/"]');
+      forms.forEach(form => {
+        const input = form.querySelector('.qty-input');
+        const buttons = form.querySelectorAll('.qty-btn');
+        if (!input) return;
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const step = Number(btn.dataset.step) || 0;
+            const min = Number(input.min) || 1;
+            const max = Number.isFinite(Number(input.max)) ? Number(input.max) : null;
+            let next = Number(input.value) || min;
+            next += step;
+            if (next < min) next = min;
+            if (max !== null && next > max) next = max;
+            input.value = next;
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

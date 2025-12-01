@@ -10,17 +10,72 @@
 <body>
   <% const showSearch = false; %>
   <%- include('partials/nav', { user, showSearch }) %>
+  <% 
+    const rawStock = Number(product.stock ?? product.quantity);
+    const stock = Number.isFinite(rawStock) ? rawStock : null;
+    const outOfStock = stock !== null ? stock <= 0 : false;
+  %>
   <div class="container mt-4">
-    <h3><%= product.name %></h3>
-    <% if (product.image) { %>
-      <img src="/images/<%= product.image %>" alt="<%= product.name %>" class="product-detail-img mb-3">
-    <% } else { %>
-      <div class="product-detail-img d-flex align-items-center justify-content-center text-muted">No Image</div>
-    <% } %>
-    <div class="fw-semibold mb-3">$<%= Number(product.price || 0).toFixed(2) %></div>
-    <form action="/add-to-cart/<%= product.id %>" method="post">
-      <button class="btn btn-primary">Add to Cart</button>
-    </form>
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-5">
+        <% if (product.image) { %>
+          <img src="/images/<%= product.image %>" alt="<%= product.name %>" class="product-detail-img mb-3 w-100" style="max-height:320px; object-fit:contain;">
+        <% } else { %>
+          <div class="product-detail-img d-flex align-items-center justify-content-center text-muted bg-light rounded" style="height:320px;">No Image</div>
+        <% } %>
+      </div>
+      <div class="col-lg-7">
+        <h3 class="mb-2"><%= product.name %></h3>
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="fw-bold fs-4 text-success">$<%= Number(product.price || 0).toFixed(2) %></div>
+          <% if (stock !== null) { %>
+            <span class="badge <%= outOfStock ? 'bg-danger' : 'bg-success' %>">
+              <%= outOfStock ? 'Out of stock' : `In stock: ${stock}` %>
+            </span>
+          <% } %>
+        </div>
+        <p class="text-muted"><%= product.description || 'No description provided.' %></p>
+
+        <form action="/add-to-cart/<%= product.id %>" method="post" class="d-flex flex-column gap-3 mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="-1" <%= outOfStock ? 'disabled' : '' %>>-</button>
+            <input
+              type="number"
+              name="quantity"
+              class="form-control w-auto text-center qty-input"
+              value="1"
+              min="1"
+              <%= stock !== null ? `max=\"${stock}\"` : '' %>
+              <%= outOfStock ? 'disabled' : '' %>
+              style="max-width:90px;"
+            >
+            <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="1" <%= outOfStock ? 'disabled' : '' %>>+</button>
+          </div>
+          <button class="btn btn-primary" <%= outOfStock ? 'disabled' : '' %>>
+            <%= outOfStock ? 'Unavailable' : 'Add to Cart' %>
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
+  <script>
+    (function() {
+      const input = document.querySelector('.qty-input');
+      const buttons = document.querySelectorAll('.qty-btn');
+      if (!input) return;
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const step = Number(btn.dataset.step) || 0;
+          const min = Number(input.min) || 1;
+          const max = Number.isFinite(Number(input.max)) ? Number(input.max) : null;
+          let next = Number(input.value) || min;
+          next += step;
+          if (next < min) next = min;
+          if (max !== null && next > max) next = max;
+          input.value = next;
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

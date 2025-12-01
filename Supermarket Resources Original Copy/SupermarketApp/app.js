@@ -145,6 +145,7 @@ app.get('/inventory/edit/:id', checkAuthenticated, checkAdmin, SupermarketContro
 app.post('/add-to-cart/:id', checkAuthenticated, ensureFn(CartController.addToCart, 'CartController.addToCart'));
 app.get('/cart', checkAuthenticated, CartController.renderCart);
 app.get('/cart/remove/:id', checkAuthenticated, ensureFn(CartController.removeItem, 'CartController.removeItem'));
+app.post('/cart/update/:id', checkAuthenticated, ensureFn(CartController.updateQuantity, 'CartController.updateQuantity'));
 app.get('/cart/clear', checkAuthenticated, ensureFn(CartController.clearCart, 'CartController.clearCart'));
 app.get('/checkout', checkAuthenticated, ensureFn(CheckoutController.renderCheckout, 'CheckoutController.renderCheckout'));
 app.post('/checkout', checkAuthenticated, ensureFn(CheckoutController.processCheckout, 'CheckoutController.processCheckout'));

@@ -231,15 +231,21 @@ body.home-page {
   color: #fff !important;
   font-size: 1.15rem;
   font-weight: 600;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
+  padding: 0.45rem 0.95rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  margin-right: 0.35rem;
 }
 .navbar-lime .nav-link:hover,
 .navbar-lime .navbar-brand:hover {
-  color: #f6ffd9 !important;
+  color: #4c7b05 !important;
+  background: #f6ffd9;
 }
 .navbar-lime .navbar-brand {
   font-size: 1.35rem;
+  border-color: transparent;
+  padding-left: 0;
+  margin-right: 0.75rem;
 }
 .navbar-lime .btn-outline-light {
   border-color: #f6ffd9;
@@ -247,6 +253,8 @@ body.home-page {
   font-size: 1.05rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
+  border-width: 2px;
+  border-radius: 999px;
 }
 .navbar-lime .btn-outline-light:hover {
   background: #f6ffd9;

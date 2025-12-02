@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .card-field {
+      background: #f8f9fa;
+      border: 1px solid #dfe3eb;
+      border-radius: 8px;
+      height: 48px;
+      font-size: 1rem;
+      color: #111827;
+    }
+    .card-field::placeholder { color: #9ca3af; }
+    .card-label { font-weight: 600; color: #111827; }
+    .saved-card-list { margin-top: 12px; }
+    .saved-card-item { border: 1px solid #dfe3eb; border-radius: 10px; padding: 12px 14px; background: linear-gradient(180deg, #fff, #f7f8fb); display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .saved-card-left { display: flex; align-items: center; gap: 12px; }
+    .saved-card-brand { font-weight: 700; color: #374151; }
+    .saved-card-masked { font-weight: 700; color: #111827; letter-spacing: 1px; }
+    .saved-card-type { font-size: 0.9rem; color: #6b7280; margin-top: 2px; text-align: right; }
+  </style>
+</head>
+<body class="home-page">
+  <% var showSearch = false; %>
+  <%- include('partials/nav', { user, showSearch }) %>
+
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <h2 class="mb-3">Profile</h2>
+            <p class="text-muted mb-4">Update your account information and preferred payment method.</p>
+
+            <% if (messages && messages.error && messages.error.length) { %>
+              <div class="alert alert-danger"><% messages.error.forEach(function(msg){ %><div><%= msg %></div><% }); %></div>
+            <% } %>
+            <% if (messages && messages.success && messages.success.length) { %>
+              <div class="alert alert-success"><% messages.success.forEach(function(msg){ %><div><%= msg %></div><% }); %></div>
+            <% } %>
+
+            <form action="/profile" method="post" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input type="text" name="username" class="form-control" value="<%= user && user.username ? user.username : '' %>" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="<%= user && user.email ? user.email : '' %>" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Contact Number</label>
+                <input type="text" name="contact" class="form-control" value="<%= user && user.contact ? user.contact : '' %>">
+              </div>
+              <% if (!user || user.role !== 'admin') { %>
+                <%
+                  var savedCardRaw = (user && (user.payment_method || user.paymentMethod)) ? (user.payment_method || user.paymentMethod) : '';
+                  var digitsOnly = savedCardRaw ? savedCardRaw.replace(/\D/g, '') : '';
+                  var last4 = digitsOnly ? digitsOnly.slice(-4) : '';
+                  var maskBody = '1234 5678 9012';
+                  var savedCardMasked = digitsOnly ? maskBody + ' ' + last4 : '1234 5678 9012 3456';
+                  var formatCardVal = function(val) {
+                    var cleaned = (val || '').replace(/\D/g, '').slice(0,16);
+                    var chunks = cleaned.match(/.{1,4}/g) || [];
+                    return chunks.join(' ');
+                  };
+                  var savedCardDisplay = digitsOnly ? ('**** **** **** ' + last4) : null;
+                  var cardType = '';
+                  if (digitsOnly.startsWith('3')) cardType = 'AMEX';
+                  else if (digitsOnly.startsWith('5')) cardType = 'MasterCard';
+                  else if (digitsOnly.startsWith('4')) cardType = 'VISA';
+                  else if (digitsOnly) cardType = 'Card';
+                %>
+                <div class="col-12">
+                  <label class="card-label mb-1">Card number</label>
+                  <input id="paymentMethod" type="text" name="paymentMethod" class="form-control card-field" aria-label="Credit card number" placeholder="<%= savedCardMasked %>" value="<%= formatCardVal(digitsOnly) %>" maxlength="19" inputmode="numeric" >
+                </div>
+                <% if (savedCardDisplay) { %>
+                <div class="col-12 saved-card-list">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="card-label">Saved payment methods</span>
+                  </div>
+                  <div class="saved-card-item">
+                    <div class="saved-card-left">
+                      <input type="radio" checked aria-label="Saved card">
+                      <span class="saved-card-brand"><%= cardType || 'Card' %></span>
+                    </div>
+                    <div class="text-end">
+                      <div class="saved-card-masked"><%= savedCardDisplay %></div>
+                      <div class="saved-card-type"><%= cardType || 'Saved' %></div>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+                <div class="col-12">
+                  <label class="card-label mb-1">Name on card</label>
+                  <input type="text" name="cardName" class="form-control card-field" placeholder="Ex. John Website">
+                </div>
+                <div class="col-md-6">
+                  <label class="card-label mb-1">Expiry date</label>
+                  <input id="cardExpiry" type="text" name="cardExpiry" class="form-control card-field" placeholder="01 / 19" maxlength="7" inputmode="numeric">
+                </div>
+                <div class="col-md-6">
+                  <label class="card-label mb-1">Security code</label>
+                  <input id="cardCvv" type="text" name="cardCvv" class="form-control card-field" placeholder="***" maxlength="4" inputmode="numeric">
+                </div>
+              <% } %>
+              <div class="col-12">
+                <label class="form-label">Address</label>
+                <textarea name="address" class="form-control" rows="3"><%= user && user.address ? user.address : '' %></textarea>
+              </div>
+              <div class="col-12 d-flex justify-content-between gap-2">
+                <a href="/home" class="btn btn-lime flex-fill text-center">Back to Home</a>
+                <button type="submit" class="btn btn-lime flex-fill">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      var input = document.getElementById('paymentMethod');
+      var expiry = document.getElementById('cardExpiry');
+      if (input) {
+        var format = function(val) {
+          var cleaned = String(val || '').replace(/\D/g, '').slice(0, 16);
+          return cleaned.replace(/(.{4})/g, '$1 ').trim();
+        };
+        input.addEventListener('input', function() {
+          var before = input.value;
+          var cursor = input.selectionStart || before.length;
+          var digitsBeforeCursor = before.slice(0, cursor).replace(/\D/g, '').length;
+          var formatted = format(before);
+          input.value = formatted;
+          var positions = [];
+          for (var i = 0, d = 0; i < formatted.length; i++) {
+            if (/\d/.test(formatted[i])) { d++; }
+            positions[d] = i + 1;
+          }
+          var nextPos = positions[digitsBeforeCursor] || formatted.length;
+          input.selectionStart = input.selectionEnd = nextPos;
+        });
+      }
+      if (expiry) {
+        var formatExpiry = function(val) {
+          var cleaned = String(val || '').replace(/\D/g, '').slice(0, 4);
+          if (cleaned.length <= 2) return cleaned;
+          return cleaned.slice(0,2) + ' / ' + cleaned.slice(2);
+        };
+        expiry.addEventListener('input', function() {
+          var formatted = formatExpiry(expiry.value);
+          expiry.value = formatted;
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
+
+

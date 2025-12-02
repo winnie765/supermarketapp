@@ -127,7 +127,7 @@ function getCartItems(req) {
 function calculateTotals(cartItems) {
   const subtotal = cartItems.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0);
   const gst = Number((subtotal * 0.09).toFixed(2)); // 9% GST rounded to cents
-  const shipping = 0;
+  const shipping = subtotal >= 59 ? 0 : 7;
   const total = subtotal + gst + shipping;
   return { subtotal, gst, shipping, total };
 }
@@ -313,15 +313,40 @@ function renderInvoice(req, res) {
   });
 }
 
+function mergeOrdersForUser(user, sessionHistory = []) {
+  const base = getHistoryForUser(user, sessionHistory) || [];
+  const userEmail = user && user.email;
+  const userId = user && user.id;
+  const merged = [...base];
+
+  globalOrderFeed.forEach((order) => {
+    const emailMatches = userEmail && order.customer && order.customer.email && String(order.customer.email).toLowerCase() === String(userEmail).toLowerCase();
+    const idMatches = userId && order.customer && order.customer.id && String(order.customer.id) === String(userId);
+    if (emailMatches || idMatches) {
+      const key = order.invoiceNumber || order.orderNumber || order.id;
+      const exists = merged.some((o) => (o.invoiceNumber || o.orderNumber || o.id) === key);
+      if (!exists) merged.push(order);
+    }
+  });
+
+  merged.sort((a, b) => {
+    const timeA = new Date(a.placedAt || a.createdAt || 0).getTime();
+    const timeB = new Date(b.placedAt || b.createdAt || 0).getTime();
+    return timeB - timeA;
+  });
+  return merged;
+}
+
 function renderOrderHistory(req, res) {
-  const orders = getHistoryForUser(req.session.user, req.session.orderHistory);
+  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
   res.render('orderHistory', {
-    orders
+    orders,
+    messages: req.flash()
   });
 }
 
 function viewOrderFromHistory(req, res) {
-  const orders = Array.isArray(req.session.orderHistory) ? req.session.orderHistory : [];
+  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
   const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
   if (!order) {
     req.flash('error', 'Order not found in your history.');

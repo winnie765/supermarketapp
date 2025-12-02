@@ -99,6 +99,28 @@
               <th>$<%= Number(total).toFixed(2) %></th>
               <th></th>
             </tr>
+            <%
+              const fee = (typeof deliveryFee === 'undefined' || deliveryFee === null) ? 0 : deliveryFee;
+              const gstValue = (typeof gst === 'undefined' || gst === null) ? Number(total) * 0.09 : Number(gst);
+              const grand = (typeof grandTotal === 'undefined' || grandTotal === null)
+                ? Number(total) + Number(gstValue) + (fee || 0)
+                : grandTotal;
+            %>
+            <tr>
+              <th colspan="4" class="text-end">GST (9%):</th>
+              <th>$<%= Number(gstValue).toFixed(2) %></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-end">Delivery Fee:</th>
+              <th><%= fee === 0 ? 'Free' : '$' + Number(fee).toFixed(2) %></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-end">Grand Total:</th>
+              <th>$<%= Number(grand).toFixed(2) %></th>
+              <th></th>
+            </tr>
           </tfoot>
         </table>
       </div>

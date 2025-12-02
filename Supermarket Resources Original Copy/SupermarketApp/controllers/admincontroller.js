@@ -110,4 +110,39 @@ function deleteUser(req, res) {
   });
 }
 
-module.exports = { renderAdmin, renderUsers, deleteUser };
+function renderEditUser(req, res) {
+  const { id } = req.params;
+  User.findById(id, (err, user) => {
+    if (err || !user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/admin/users');
+    }
+    res.render('adminEditUser', {
+      user: req.session.user,
+      editUser: user,
+      messages: req.flash()
+    });
+  });
+}
+
+function updateUser(req, res) {
+  const { id } = req.params;
+  const payload = {
+    username: req.body.username,
+    email: req.body.email,
+    contact: req.body.contact,
+    address: req.body.address,
+    role: req.body.role
+  };
+  User.update(id, payload, (err) => {
+    if (err) {
+      console.error('Admin update user error:', err);
+      req.flash('error', 'Failed to update user.');
+      return res.redirect(`/admin/users/${id}/edit`);
+    }
+    req.flash('success', 'User updated.');
+    res.redirect('/admin/users');
+  });
+}
+
+module.exports = { renderAdmin, renderUsers, deleteUser, renderEditUser, updateUser };

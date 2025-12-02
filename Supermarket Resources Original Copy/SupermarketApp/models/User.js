@@ -26,6 +26,13 @@ module.exports = {
     });
   },
 
+  findById(id, cb) {
+    db.query('SELECT * FROM users WHERE id = ?', [id], (err, rows) => {
+      if (err) return cb(err);
+      cb(null, rows[0]);
+    });
+  },
+
   findAll(cb) {
     const sql = 'SELECT id, username, email, role, contact, address FROM users ORDER BY id ASC';
     db.query(sql, (err, rows) => {
@@ -63,12 +70,13 @@ module.exports = {
   update(id, data, cb) {
     const fields = [];
     const values = [];
-    if (data.username) { fields.push('username=?'); values.push(data.username); }
-    if (data.email) { fields.push('email=?'); values.push(data.email); }
+    if (typeof data.username === 'string') { fields.push('username=?'); values.push(data.username); }
+    if (typeof data.email === 'string') { fields.push('email=?'); values.push(data.email); }
     if (data.password) { fields.push('password=?'); values.push(hashPassword(data.password)); }
-    if (data.address) { fields.push('address=?'); values.push(data.address); }
-    if (data.contact) { fields.push('contact=?'); values.push(data.contact); }
-    if (data.role) { fields.push('role=?'); values.push(data.role); }
+    if (typeof data.address === 'string') { fields.push('address=?'); values.push(data.address); }
+    if (typeof data.contact === 'string') { fields.push('contact=?'); values.push(data.contact); }
+    // Intentionally skip payment_method to avoid errors on schemas without that column
+    if (typeof data.role === 'string') { fields.push('role=?'); values.push(data.role); }
     if (!fields.length) return cb(null, { affectedRows: 0 });
     values.push(id);
     db.query(`UPDATE users SET ${fields.join(', ')} WHERE id=?`, values, cb);

@@ -103,11 +103,17 @@ function renderCart(req, res) {
     if (err) console.error('Load cart failed:', err);
     refreshSessionCart(req, cart);
     const total = calculateCartTotal(cart);
+    const gst = Number((total * 0.09).toFixed(2));
+    const deliveryFee = total >= 59 ? 0 : 7;
+    const grandTotal = total + gst + deliveryFee;
 
     res.render('cart', {
       user: req.session.user,
       cart,
       total,
+      gst,
+      deliveryFee,
+      grandTotal,
       messages: req.flash()
     });
   });

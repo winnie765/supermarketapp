@@ -148,6 +148,8 @@ app.post('/register', ensureFn(UserController.registerUser, 'UserController.regi
 
 app.get('/login', UserController.renderLogin);
 app.post('/login', ensureFn(UserController.loginUser, 'UserController.loginUser'));
+app.get('/profile', checkAuthenticated, ensureFn(UserController.renderProfile, 'UserController.renderProfile'));
+app.post('/profile', checkAuthenticated, ensureFn(UserController.updateProfile, 'UserController.updateProfile'));
 app.get('/logout', SupermarketController.logout);
 
 
@@ -158,6 +160,8 @@ app.post('/addProduct', checkAuthenticated, checkAdmin, upload.single('image'), 
 app.get('/updateProduct/:id', checkAuthenticated, checkAdmin, SupermarketController.renderUpdateProductForm);
 app.post('/updateProduct/:id', checkAuthenticated, checkAdmin, upload.single('image'), ensureFn(SupermarketController.updateProduct, 'SupermarketController.updateProduct'));
 app.get('/inventory/edit/:id', checkAuthenticated, checkAdmin, SupermarketController.renderUpdateProductForm); // new edit route
+app.get('/inventory/delete/:id', checkAuthenticated, checkAdmin, ensureFn(SupermarketController.deleteProduct, 'SupermarketController.deleteProduct'));
+app.post('/inventory/delete/:id', checkAuthenticated, checkAdmin, ensureFn(SupermarketController.deleteProduct, 'SupermarketController.deleteProduct'));
 
 // Cart
 app.post('/add-to-cart/:id', checkAuthenticated, ensureFn(CartController.addToCart, 'CartController.addToCart'));
@@ -177,6 +181,8 @@ app.get('/admin', checkAuthenticated, checkAdmin, AdminController.renderAdmin);
 app.get('/admin/users', checkAuthenticated, checkAdmin, AdminController.renderUsers);
 app.get('/admin/users/:id/delete', checkAuthenticated, checkAdmin, ensureFn(AdminController.deleteUser, 'AdminController.deleteUser')); // convenience GET
 app.post('/admin/users/:id/delete', checkAuthenticated, checkAdmin, ensureFn(AdminController.deleteUser, 'AdminController.deleteUser'));
+app.get('/admin/users/:id/edit', checkAuthenticated, checkAdmin, ensureFn(AdminController.renderEditUser, 'AdminController.renderEditUser'));
+app.post('/admin/users/:id/edit', checkAuthenticated, checkAdmin, ensureFn(AdminController.updateUser, 'AdminController.updateUser'));
 
 // 404
 app.use((req, res) => res.status(404).send('Not Found'));

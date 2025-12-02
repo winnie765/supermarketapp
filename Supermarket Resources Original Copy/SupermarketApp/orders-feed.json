@@ -1,5 +1,30 @@
 [
   {
+    "invoiceNumber": "INV-87501928",
+    "customer": {
+      "fullName": "sarahlee",
+      "email": "sarahlee@gmail.com",
+      "address": "woodlands ",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 10,
+        "price": 1.8,
+        "subtotal": 18
+      }
+    ],
+    "subtotal": 18,
+    "gst": 1.62,
+    "shipping": 0,
+    "total": 19.62,
+    "placedAt": "2025-12-02T14:58:21.942Z"
+  },
+  {
     "invoiceNumber": "INV-58613609",
     "customer": {
       "fullName": "sarahlee",

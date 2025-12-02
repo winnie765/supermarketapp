@@ -93,11 +93,60 @@ function requireAuth(req, res, next) {
   next();
 }
 
+function renderProfile(req, res) {
+  if (!req.session.user) return res.redirect('/login');
+  const userId = req.session.user.id;
+  User.findById(userId, (err, user) => {
+    if (err) console.error('Profile fetch error:', err);
+    const viewUser = user || req.session.user;
+    res.render('profile', {
+      user: viewUser,
+      messages: res.locals.messages || { error: [], success: [] }
+    });
+  });
+}
+
+function updateProfile(req, res) {
+  if (!req.session.user) return res.redirect('/login');
+  const userId = req.session.user.id;
+  const { username, email, contact, address } = req.body || {};
+  const rawPayment = (req.body && req.body.paymentMethod) ? String(req.body.paymentMethod) : '';
+  const paymentDigits = rawPayment.replace(/\D/g, '').slice(-16); // keep last 16 digits only
+  const paymentMethod = paymentDigits || '';
+
+  if (!username || !email) {
+    req.flash('error', 'Name and email are required.');
+    return res.redirect('/profile');
+  }
+
+  User.update(userId, { username, email, contact, address, paymentMethod }, (err) => {
+    if (err) {
+      console.error('Profile update error:', err);
+      req.flash('error', 'Could not update profile.');
+      return res.redirect('/profile');
+    }
+    User.findById(userId, (freshErr, freshUser) => {
+      if (freshErr) console.error('Profile reload error:', freshErr);
+      const updatedSessionUser = freshUser || { ...req.session.user, username, email, contact, address };
+      // Persist the entered card digits in session for display even if DB schema lacks the column
+      if (paymentMethod) {
+        updatedSessionUser.paymentMethod = paymentMethod;
+        updatedSessionUser.payment_method = paymentMethod;
+      }
+      req.session.user = updatedSessionUser;
+      req.flash('success', 'Changes saved.');
+      req.session.save(() => res.redirect('/profile'));
+    });
+  });
+}
+
 module.exports = {
   renderRegister,
   registerUser: register,
   renderLogin,
   loginUser: login,
   logout,
-  requireAuth
+  requireAuth,
+  renderProfile,
+  updateProfile
 };

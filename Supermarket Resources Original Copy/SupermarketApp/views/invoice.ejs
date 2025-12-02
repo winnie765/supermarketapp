@@ -111,9 +111,13 @@
               <th colspan="3" class="text-end text-muted">GST (9%)</th>
               <th class="text-end text-muted">$<%= gstValue.toFixed(2) %></th>
             </tr>
+            <tr>
+              <th colspan="3" class="text-end">Delivery Fee</th>
+              <th class="text-end"><%= Number(shipping || 0) === 0 ? 'Free' : '$' + Number(shipping).toFixed(2) %></th>
+            </tr>
             <tr class="table-success">
               <th colspan="3" class="text-end">Total</th>
-              <% const totalValue = Number(subtotal) + Number(gstValue); %>
+              <% const totalValue = Number(total || 0) || (Number(subtotal) + Number(gstValue) + Number(shipping || 0)); %>
               <th class="text-end">$<%= totalValue.toFixed(2) %></th>
             </tr>
           </tfoot>

@@ -150,6 +150,7 @@ function applyCategoryFilter(products, filter) {
 function renderShopping(req, res) {
   const q = (req.query.q || '').trim();
   const filter = normalizeFilter(req.query.filter);
+  const sort = (req.query.sort || '').toLowerCase();
   const finish = (err, products) => {
     if (err) {
       console.error('Shopping error:', err);
@@ -158,17 +159,26 @@ function renderShopping(req, res) {
         products: [],
         q,
         filter,
+        sort,
         categories: DEFAULT_CATEGORIES,
         messages: req.flash()
       });
     }
     const categories = buildCategoryList(products);
-    const filteredProducts = applyCategoryFilter(products, filter);
+    let filteredProducts = applyCategoryFilter(products, filter);
+    if (sort === 'price-desc' || sort === 'price-asc') {
+      filteredProducts = [...filteredProducts].sort((a, b) => {
+        const priceA = Number(a.price) || 0;
+        const priceB = Number(b.price) || 0;
+        return sort === 'price-desc' ? priceB - priceA : priceA - priceB;
+      });
+    }
     res.render('shopping', {
       user: req.session.user,
       products: filteredProducts,
       q,
       filter,
+      sort,
       categories,
       messages: req.flash()
     });

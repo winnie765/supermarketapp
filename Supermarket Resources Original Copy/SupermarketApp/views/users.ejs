@@ -48,7 +48,12 @@
               <td><%= u.contact || '-' %></td>
               <td><%= u.address || '-' %></td>
               <td>
-                <a href="/admin/users/<%= u.id %>/edit" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a
+                  href="/admin/users/<%= u.id %>/edit"
+                  class="btn btn-sm btn-warning me-1 edit-btn"
+                  data-user-id="<%= u.id %>"
+                  data-role="<%= u.role %>"
+                >Edit</a>
                 <form action="/admin/users/<%= u.id %>/delete" method="post" class="d-inline" onsubmit="return confirm('Delete this user?');">
                   <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
@@ -64,5 +69,21 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      const currentUserId = <%- user && user.id ? JSON.stringify(String(user.id)) : 'null' %>;
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const role = (btn.dataset.role || '').toLowerCase();
+          const targetId = btn.dataset.userId;
+          const isSelf = currentUserId && targetId && String(targetId) === String(currentUserId);
+          if (role === 'admin' && !isSelf) {
+            e.preventDefault();
+            alert('Admins cannot edit Admins details');
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

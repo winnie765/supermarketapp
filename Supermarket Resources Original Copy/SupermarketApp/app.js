@@ -5,7 +5,13 @@ const path = require('path');
 const multer = require('multer');
 const MySQLStore = require('express-mysql-session')(session);
 const crypto = require('crypto');
+const util = require('util');
 require('dotenv').config();
+
+// Silence deprecated util.isArray by redirecting to Array.isArray (Node >= 16)
+if (typeof util.isArray === 'function') {
+  util.isArray = Array.isArray;
+}
 
 const app = express();
 
@@ -89,18 +95,6 @@ function checkAdmin(req, res, next) {
   next();
 }
 
-// Prevent admin accounts from accessing shopping/cart features
-function blockAdminShopping(req, res, next) {
-  if (req.session.user && req.session.user.role === 'admin') {
-    const blocked = [/^\/shopping$/, /^\/add-to-cart\//, /^\/cart(\/.*)?$/, /^\/checkout$/];
-    if (blocked.some(r => r.test(req.path))) {
-      req.flash('error', 'Admin account cannot shop. Use a customer account.');
-      return res.redirect('/inventory');
-    }
-  }
-  next();
-}
-
 // Debug (keep briefly)
 console.log({
   addToCart: typeof CartController.addToCart,
@@ -138,7 +132,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes (NO parentheses after handler names)
-app.use(blockAdminShopping);
 app.get('/', SupermarketController.renderLanding);
 app.get('/home', SupermarketController.renderHomePage);
 app.get('/shopping', SupermarketController.renderShopping);
@@ -183,6 +176,7 @@ app.get('/admin/users/:id/delete', checkAuthenticated, checkAdmin, ensureFn(Admi
 app.post('/admin/users/:id/delete', checkAuthenticated, checkAdmin, ensureFn(AdminController.deleteUser, 'AdminController.deleteUser'));
 app.get('/admin/users/:id/edit', checkAuthenticated, checkAdmin, ensureFn(AdminController.renderEditUser, 'AdminController.renderEditUser'));
 app.post('/admin/users/:id/edit', checkAuthenticated, checkAdmin, ensureFn(AdminController.updateUser, 'AdminController.updateUser'));
+app.post('/admin/orders/:orderId/status', checkAuthenticated, checkAdmin, ensureFn(AdminController.updateOrderStatus, 'AdminController.updateOrderStatus'));
 
 // 404
 app.use((req, res) => res.status(404).send('Not Found'));

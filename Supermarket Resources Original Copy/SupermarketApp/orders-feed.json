@@ -1,5 +1,38 @@
 [
   {
+    "invoiceNumber": "INV-32158828",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "1231"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 2,
+        "price": 12.32,
+        "subtotal": 24.64
+      },
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 12,
+        "price": 5,
+        "subtotal": 60
+      }
+    ],
+    "subtotal": 84.64,
+    "gst": 7.62,
+    "shipping": 0,
+    "total": 92.26,
+    "placedAt": "2025-12-03T03:22:38.839Z",
+    "status": "Cancelled"
+  },
+  {
     "invoiceNumber": "INV-28596072",
     "customer": {
       "fullName": "winnie",

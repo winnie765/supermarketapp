@@ -74,122 +74,80 @@ INSERT INTO `users` VALUES (1,'Peter Lim','peter@peter.com','7c4a8d09ca3762af61e
 UNLOCK TABLES;
 
 --
--- Table structure for table `carts`
+-- Table structure for table `users_favourite`
 --
 
-DROP TABLE IF EXISTS `carts`;
+DROP TABLE IF EXISTS `users_favourite`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `carts` (
+CREATE TABLE `users_favourite` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userId` int NOT NULL,
-  `productId` int NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_cart_user_product` (`userId`,`productId`),
-  KEY `idx_cart_user` (`userId`),
-  KEY `idx_cart_product` (`productId`),
-  CONSTRAINT `fk_cart_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cart_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `uniq_user_product` (`user_id`,`product_id`),
+  KEY `idx_users_favourite_user` (`user_id`),
+  KEY `idx_users_favourite_product` (`product_id`),
+  CONSTRAINT `fk_users_favourite_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_users_favourite_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `carts`
+-- Dumping data for table `users_favourite`
 --
 
-LOCK TABLES `carts` WRITE;
-/*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-INSERT INTO `carts` (`id`,`userId`,`productId`,`quantity`,`createdAt`) VALUES
-(1,2,1,2,'2025-10-18 12:00:00'),
-(2,4,3,1,'2025-10-19 09:15:00');
-/*!40000 ALTER TABLE `carts` ENABLE KEYS */;
+LOCK TABLES `users_favourite` WRITE;
+/*!40000 ALTER TABLE `users_favourite` DISABLE KEYS */;
+INSERT INTO `users_favourite` (`user_id`,`product_id`) VALUES (2,1),(2,3),(3,2);
+/*!40000 ALTER TABLE `users_favourite` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `purchase_history`
+-- Table structure for table `invoices`
 --
 
-DROP TABLE IF EXISTS `purchase_history`;
+DROP TABLE IF EXISTS `invoices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `purchase_history` (
+CREATE TABLE `invoices` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userId` int NOT NULL,
-  `productId` int NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
-  `totalPrice` double(10,2) NOT NULL,
-  `purchasedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int NOT NULL,
+  `number` varchar(50) NOT NULL,
+  `issued_at` datetime NOT NULL,
+  `customer_name` varchar(255) NOT NULL,
+  `billing` text,
+  `payment_method` varchar(50) NOT NULL,
+  `payment_last4` varchar(8) DEFAULT NULL,
+  `total` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
-  KEY `idx_ph_user` (`userId`),
-  KEY `idx_ph_product` (`productId`),
-  CONSTRAINT `fk_ph_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_ph_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `uniq_invoice_number` (`number`),
+  KEY `idx_invoices_user` (`user_id`),
+  CONSTRAINT `fk_invoices_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Trigger to clear cart entries once purchased
+-- Table structure for table `invoice_items`
 --
 
-DROP TRIGGER IF EXISTS `trg_purchase_history_clear_cart`;
-DELIMITER $$
-CREATE TRIGGER `trg_purchase_history_clear_cart`
-AFTER INSERT ON `purchase_history`
-FOR EACH ROW
-BEGIN
-  DELETE FROM `carts`
-  WHERE `userId` = NEW.`userId`
-    AND `productId` = NEW.`productId`;
-END$$
-DELIMITER ;
-
---
--- Dumping data for table `purchase_history`
---
-
-LOCK TABLES `purchase_history` WRITE;
-/*!40000 ALTER TABLE `purchase_history` DISABLE KEYS */;
-INSERT INTO `purchase_history` (`id`,`userId`,`productId`,`quantity`,`totalPrice`,`purchasedAt`) VALUES
-(1,2,1,2,3.00,'2025-10-10 10:00:00'),
-(2,4,4,1,1.80,'2025-10-11 15:45:00');
-/*!40000 ALTER TABLE `purchase_history` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `reviews`
---
-
-DROP TABLE IF EXISTS `reviews`;
+DROP TABLE IF EXISTS `invoice_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reviews` (
+CREATE TABLE `invoice_items` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userId` int NOT NULL,
-  `productId` int NOT NULL,
-  `rating` tinyint unsigned NOT NULL,
-  `comment` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `invoice_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_review_user` (`userId`),
-  KEY `idx_review_product` (`productId`),
-  CONSTRAINT `fk_review_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_review_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+  KEY `idx_invoice_items_invoice` (`invoice_id`),
+  CONSTRAINT `fk_invoice_items_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `reviews`
---
-
-LOCK TABLES `reviews` WRITE;
-/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` (`id`,`userId`,`productId`,`rating`,`comment`,`createdAt`) VALUES
-(1,2,1,5,'Crisp and fresh.','2025-10-12 09:00:00'),
-(2,4,3,4,'Great with cereal.','2025-10-13 18:30:00');
-/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -199,5 +157,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-10-19 17:33:08

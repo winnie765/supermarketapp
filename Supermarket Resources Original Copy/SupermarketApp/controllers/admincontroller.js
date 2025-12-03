@@ -117,6 +117,12 @@ function renderEditUser(req, res) {
       req.flash('error', 'User not found');
       return res.redirect('/admin/users');
     }
+    const isTargetAdmin = user.role === 'admin';
+    const isSelf = req.session.user && String(req.session.user.id) === String(user.id);
+    if (isTargetAdmin && !isSelf) {
+      req.flash('error', 'You cannot edit another admin account.');
+      return res.redirect('/admin/users');
+    }
     res.render('adminEditUser', {
       user: req.session.user,
       editUser: user,
@@ -127,22 +133,52 @@ function renderEditUser(req, res) {
 
 function updateUser(req, res) {
   const { id } = req.params;
-  const payload = {
-    username: req.body.username,
-    email: req.body.email,
-    contact: req.body.contact,
-    address: req.body.address,
-    role: req.body.role
-  };
-  User.update(id, payload, (err) => {
-    if (err) {
-      console.error('Admin update user error:', err);
-      req.flash('error', 'Failed to update user.');
-      return res.redirect(`/admin/users/${id}/edit`);
+  User.findById(id, (findErr, existing) => {
+    if (findErr || !existing) {
+      req.flash('error', 'User not found');
+      return res.redirect('/admin/users');
     }
-    req.flash('success', 'User updated.');
-    res.redirect('/admin/users');
+    const isTargetAdmin = existing.role === 'admin';
+    const isSelf = req.session.user && String(req.session.user.id) === String(existing.id);
+    if (isTargetAdmin && !isSelf) {
+      req.flash('error', 'You cannot edit another admin account.');
+      return res.redirect('/admin/users');
+    }
+    const payload = {
+      username: req.body.username,
+      email: req.body.email,
+      contact: req.body.contact,
+      address: req.body.address,
+      role: req.body.role
+    };
+    User.update(id, payload, (err) => {
+      if (err) {
+        console.error('Admin update user error:', err);
+        req.flash('error', 'Failed to update user.');
+        return res.redirect(`/admin/users/${id}/edit`);
+      }
+      req.flash('success', 'User updated.');
+      res.redirect('/admin/users');
+    });
   });
 }
 
-module.exports = { renderAdmin, renderUsers, deleteUser, renderEditUser, updateUser };
+function updateOrderStatus(req, res) {
+  const { orderId } = req.params;
+  const status = req.body.status;
+  if (!orderId || !status) {
+    req.flash('error', 'Invalid order or status');
+    return res.redirect('/admin');
+  }
+  const ok = typeof CheckoutController.setOrderStatus === 'function'
+    ? CheckoutController.setOrderStatus(orderId, status)
+    : false;
+  if (!ok) {
+    req.flash('error', 'Failed to update order status');
+  } else {
+    req.flash('success', 'Order status updated');
+  }
+  res.redirect('/admin');
+}
+
+module.exports = { renderAdmin, renderUsers, deleteUser, renderEditUser, updateUser, updateOrderStatus };

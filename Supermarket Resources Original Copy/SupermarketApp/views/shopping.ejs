@@ -14,6 +14,7 @@
 
   <% const searchValue = typeof q === 'string' ? q : ''; %>
   <% const filterValue = typeof filter === 'string' ? filter : 'all'; %>
+  <% const sortValue = typeof sort === 'string' ? sort : ''; %>
   <% 
     const categoryList = (typeof categories !== 'undefined' && Array.isArray(categories))
       ? categories
@@ -30,6 +31,11 @@
             <% const label = value.charAt(0).toUpperCase() + value.slice(1); %>
             <option value="<%= value %>" <%= filterValue === value ? 'selected' : '' %>><%= label %></option>
           <% }) %>
+        </select>
+        <select name="sort" class="form-select form-select-sm">
+          <option value="">Sort by price</option>
+          <option value="price-asc" <%= sortValue === 'price-asc' ? 'selected' : '' %>>Lowest to highest</option>
+          <option value="price-desc" <%= sortValue === 'price-desc' ? 'selected' : '' %>>Highest to lowest</option>
         </select>
         <button type="submit" class="btn btn-lime btn-sm">Filter</button>
       </form>

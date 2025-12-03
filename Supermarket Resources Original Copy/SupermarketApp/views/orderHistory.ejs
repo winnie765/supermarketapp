@@ -39,6 +39,7 @@
               <th>Invoice #</th>
               <th>Placed On</th>
               <th>Payment</th>
+              <th>Status</th>
               <th class="text-end">Total</th>
               <th style="width: 160px;">Actions</th>
             </tr>
@@ -49,6 +50,17 @@
                 <td class="fw-semibold"><%= order.invoiceNumber %></td>
                 <td><%= new Date(order.placedAt).toLocaleString() %></td>
                 <td><span class="badge bg-info text-dark text-uppercase"><%= order.customer.paymentMethod %></span></td>
+                <% 
+                  const statusRaw = order.status || (order.customer && order.customer.paymentMethod && order.customer.paymentMethod.toLowerCase() === 'cash' ? 'Cash on Delivery' : 'Paid');
+                  const status = String(statusRaw || '').toLowerCase();
+                  const statusClass = (() => {
+                    if (status === 'delivered') return 'bg-success';
+                    if (status === 'cancelled' || status === 'canceled') return 'bg-danger';
+                    if (status === 'cash on delivery' || status === 'cash') return 'bg-warning text-dark';
+                    return 'bg-secondary';
+                  })();
+                %>
+                <td><span class="badge <%= statusClass %> text-capitalize"><%= statusRaw || 'Paid' %></span></td>
                 <td class="text-end">$<%= Number(order.total || 0).toFixed(2) %></td>
                 <td>
                   <div class="d-flex gap-2">

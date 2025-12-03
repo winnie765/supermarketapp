@@ -90,6 +90,36 @@ function getRecentOrders(limit = 5) {
   return unique.slice(0, safeLimit);
 }
 
+function setOrderStatus(orderKey, status) {
+  if (!orderKey) return false;
+  const target = String(orderKey).toLowerCase();
+  const applyStatus = (order) => {
+    const idMatch = (order.id && String(order.id).toLowerCase() === target);
+    const invMatch = (order.invoiceNumber && String(order.invoiceNumber).toLowerCase() === target);
+    const numMatch = (order.orderNumber && String(order.orderNumber).toLowerCase() === target);
+    if (idMatch || invMatch || numMatch) {
+      order.status = status;
+      return true;
+    }
+    return false;
+  };
+
+  let updated = false;
+  globalOrderFeed.forEach((order) => {
+    if (applyStatus(order)) updated = true;
+  });
+  orderHistoryStore.forEach((orders, key) => {
+    if (Array.isArray(orders)) {
+      orders.forEach((order) => {
+        if (applyStatus(order)) updated = true;
+      });
+      orderHistoryStore.set(key, orders);
+    }
+  });
+  if (updated) persistFeed();
+  return updated;
+}
+
 function getCartItems(req) {
   const sessionCart = req.session.cart;
   const rawItems = Array.isArray(sessionCart)
@@ -405,5 +435,6 @@ module.exports = {
   renderInvoice,
   renderOrderHistory,
   viewOrderFromHistory,
-  getRecentOrders
+  getRecentOrders,
+  setOrderStatus
 };

@@ -31,7 +31,9 @@
             <p class="text-muted">Use your banking app to scan the QR code and complete the payment. Keep this tab open while you pay.</p>
 
             <div class="d-flex flex-wrap gap-3 align-items-center">
-              <div id="paynow-qr" class="border rounded p-2 bg-light"></div>
+              <div class="border rounded p-2 bg-light">
+                <img src="/images/paynow-qr.png" alt="PayNow QR code" class="img-fluid" style="max-width: 240px;">
+              </div>
               <div class="text-muted small">
                 <div>Reference: <%= (order.paynow && order.paynow.reference) || order.invoiceNumber %></div>
                 <div>Amount: $<%= Number(total).toFixed(2) %></div>
@@ -50,37 +52,5 @@
       </div>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script>
-    (function() {
-      var qrContainer = document.getElementById('paynow-qr');
-      var payload = <%- JSON.stringify((order.paynow && order.paynow.payload) || '') %>;
-      if (!qrContainer) return;
-      if (!payload) {
-        var data = {
-          invoiceNumber: <%- JSON.stringify(order.invoiceNumber) %>,
-          total: Number(<%- JSON.stringify(total) %>),
-          fullName: <%- JSON.stringify(order.customer && order.customer.fullName) %>,
-          email: <%- JSON.stringify(order.customer && order.customer.email) %>
-        };
-        var amount = Number.isFinite(data.total) ? data.total.toFixed(2) : '0.00';
-        var parts = [
-          'PAYNOW',
-          'INV:' + data.invoiceNumber,
-          'AMT:' + amount,
-          data.fullName ? ('NAME:' + data.fullName) : null,
-          data.email ? ('EMAIL:' + data.email) : null
-        ].filter(Boolean);
-        payload = parts.join('|');
-      }
-      qrContainer.innerHTML = '';
-      new QRCode(qrContainer, {
-        text: payload,
-        width: 220,
-        height: 220
-      });
-    })();
-  </script>
 </body>
 </html>

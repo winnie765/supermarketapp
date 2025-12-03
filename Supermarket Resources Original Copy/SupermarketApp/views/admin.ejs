@@ -140,6 +140,18 @@
                       <% if (order.customer && order.customer.paymentMethod) { %>
                         <span class="badge bg-info text-dark text-uppercase"><%= order.customer.paymentMethod %></span>
                       <% } %>
+                      <% 
+                        const statusRaw = order.status || (order.customer && order.customer.paymentMethod && order.customer.paymentMethod.toLowerCase() === 'cash' ? 'Cash on Delivery' : 'Paid');
+                        const status = String(statusRaw || '').toLowerCase();
+                        const statusLabel = statusRaw || 'Paid';
+                        const statusClass = (() => {
+                          if (status === 'delivered') return 'bg-success';
+                          if (status === 'cancelled' || status === 'canceled') return 'bg-danger';
+                          if (status === 'cash on delivery' || status === 'cash') return 'bg-warning text-dark';
+                          return 'bg-secondary';
+                        })();
+                      %>
+                      <span class="badge <%= statusClass %> text-capitalize"><%= statusLabel %></span>
                       <div class="ms-lg-auto fw-semibold">S$<%= Number(order.total || 0).toFixed(2) %></div>
                       <small class="text-muted">
                         <%= new Date(order.placedAt || order.createdAt || Date.now()).toLocaleString('en-SG', { hour12: false }) %>
@@ -162,6 +174,13 @@
                         </div>
                       <% } %>
                     </div>
+                    <form action="/admin/orders/<%= order.orderNumber || order.invoiceNumber || order.id %>/status" method="post" class="mt-2 d-flex flex-wrap align-items-center gap-2">
+                      <span class="text-muted small me-1">Update status:</span>
+                      <button type="submit" name="status" value="Paid" class="btn btn-sm btn-outline-secondary">Paid</button>
+                      <button type="submit" name="status" value="Delivered" class="btn btn-sm btn-outline-success">Delivered</button>
+                      <button type="submit" name="status" value="Cancelled" class="btn btn-sm btn-outline-danger">Cancelled</button>
+                      <button type="submit" name="status" value="Cash on Delivery" class="btn btn-sm btn-outline-warning text-dark">Cash on Delivery</button>
+                    </form>
                   </div>
                 <% }); %>
               </div>

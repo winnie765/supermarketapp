@@ -81,38 +81,65 @@
           <div class="card-header">Shipping Details</div>
           <div class="card-body">
             <form action="/checkout" method="post">
+              <% if (savedCards && savedCards.length) { %>
+                <div class="mb-3">
+                  <label class="form-label">Saved card</label>
+                  <select name="savedPaymentMethod" class="form-select" id="savedPaymentSelect">
+                    <option value="">Use a new card</option>
+                    <% savedCards.forEach(function(card) { %>
+                      <option value="<%= card.id %>"><%= (card.brand || 'Card') %> •••• <%= card.last4 %></option>
+                    <% }); %>
+                  </select>
+                </div>
+              <% } %>
               <div class="mb-3">
                 <label class="form-label">Full Name</label>
-                <input name="fullName" class="form-control" required>
+                <input name="fullName" class="form-control" value="<%= prefill && prefill.fullName ? prefill.fullName : '' %>" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" required>
+                <input name="email" type="email" class="form-control" value="<%= prefill && prefill.email ? prefill.email : '' %>" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Address</label>
-                <textarea name="address" class="form-control" rows="3" required></textarea>
+                <textarea name="address" class="form-control" rows="3" required><%= prefill && prefill.address ? prefill.address : '' %></textarea>
               </div>
               <div class="mb-3">
                 <label class="form-label">Payment Method</label>
-                <select name="paymentMethod" class="form-select" required>
-                  <option value="card">Credit / Debit Card</option>
-                  <option value="cash">Cash on Delivery</option>
-                  <option value="paynow">PayNow</option>
-                  <option value="applepay">Apple Pay</option>
-                </select>
+                <div class="d-flex flex-column gap-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payCard" value="card" checked>
+                    <label class="form-check-label" for="payCard">Credit / Debit Card</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payCash" value="cash">
+                    <label class="form-check-label" for="payCash">Cash on Delivery</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payPaynow" value="paynow">
+                    <label class="form-check-label" for="payPaynow">PayNow</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payApple" value="applepay">
+                    <label class="form-check-label" for="payApple">Apple Pay</label>
+                  </div>
+                </div>
               </div>
               <div class="mb-3" id="card-fields">
                 <label class="form-label">Card Number</label>
-                <input name="cardNumber" class="form-control" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456">
+                <input name="cardNumber" id="cardNumber" class="form-control" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19">
                 <div class="row g-2 mt-2">
+                  <div class="col-12">
+                    <label class="form-label">Name on Card</label>
+                    <input name="cardName" class="form-control" autocomplete="cc-name" placeholder="Name as on card">
+                  </div>
                   <div class="col-sm-6">
                     <label class="form-label">Expiry</label>
-                    <input name="cardExpiry" class="form-control" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" aria-label="Card expiry (MM/YY)">
+                    <input name="cardExpiry" id="cardExpiry" class="form-control" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" aria-label="Card expiry (MM/YY)" maxlength="5" pattern="\\d{2}/\\d{2}">
                   </div>
                   <div class="col-sm-6">
                     <label class="form-label">CVV</label>
-                    <input name="cardCvv" class="form-control" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" aria-label="Card CVV">
+                    <input name="cardCvv" id="cardCvv" class="form-control" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="3" aria-label="Card CVV" pattern="\\d{3}">
                   </div>
                 </div>
                 <small class="text-muted d-block mt-2">Card details are required only for card payments.</small>
@@ -131,19 +158,65 @@
   </div>
   <script>
     (function() {
-      const paymentSelect = document.querySelector('select[name="paymentMethod"]');
+      const paymentSelect = null; // replaced by radio group
+      const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
       const cardFields = document.getElementById('card-fields');
-      if (!paymentSelect || !cardFields) return;
+      const savedSelect = document.getElementById('savedPaymentSelect');
+      const cardNumber = document.getElementById('cardNumber');
+      const cardExpiry = document.getElementById('cardExpiry');
+      const cardCvv = document.getElementById('cardCvv');
+      if (!cardFields) return;
       function toggleCardFields() {
-        const isCard = paymentSelect.value === 'card';
-        cardFields.style.display = isCard ? 'block' : 'none';
+        let method = 'card';
+        paymentRadios.forEach(r => { if (r.checked) method = r.value; });
+        const isCard = method === 'card';
+        const usingSaved = savedSelect && savedSelect.value;
+        cardFields.style.display = isCard && !usingSaved ? 'block' : 'none';
         cardFields.querySelectorAll('input').forEach(input => {
-          input.required = isCard;
+          input.required = isCard && !usingSaved;
         });
       }
-      paymentSelect.addEventListener('change', toggleCardFields);
+      paymentRadios.forEach(r => r.addEventListener('change', toggleCardFields));
+      if (savedSelect) savedSelect.addEventListener('change', toggleCardFields);
       toggleCardFields();
+
+      if (cardNumber) {
+        const formatCard = (val) => {
+          const cleaned = String(val || '').replace(/\D/g, '').slice(0, 16);
+          return cleaned.replace(/(.{4})/g, '$1 ').trim();
+        };
+        cardNumber.addEventListener('input', () => {
+          const before = cardNumber.value;
+          const cursor = cardNumber.selectionStart || before.length;
+          const digitsBeforeCursor = before.slice(0, cursor).replace(/\D/g, '').length;
+          const formatted = formatCard(before);
+          cardNumber.value = formatted;
+          // position caret
+          let pos = 0, digits = 0;
+          while (pos < formatted.length && digits < digitsBeforeCursor) {
+            if (/\d/.test(formatted[pos])) digits++;
+            pos++;
+          }
+          cardNumber.selectionStart = cardNumber.selectionEnd = pos;
+        });
+      }
+      if (cardExpiry) {
+        cardExpiry.addEventListener('input', () => {
+          const digits = cardExpiry.value.replace(/\D/g, '').slice(0, 4);
+          let formatted = digits;
+          if (digits.length > 2) {
+            formatted = digits.slice(0, 2) + '/' + digits.slice(2);
+          }
+          cardExpiry.value = formatted;
+        });
+      }
+      if (cardCvv) {
+        cardCvv.addEventListener('input', () => {
+          cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 3);
+        });
+      }
     })();
   </script>
 </body>
 </html>
+

@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const Supermarket = require('../models/Supermarket');
 const CartModel = require('../models/cart');
+const PaymentMethods = require('../models/paymentMethods');
+const UserController = require('./Usercontroller');
 
 // In-memory, user-scoped order history so it survives logout/login (per server run)
 const orderHistoryStore = new Map(); // key => [orders]
@@ -159,9 +161,21 @@ function renderCheckout(req, res) {
   }
 
   const totals = calculateTotals(cartItems);
+  const userId = req.session.user && req.session.user.id;
+  if (userId && PaymentMethods && typeof PaymentMethods.listByUser === 'function') {
+    return PaymentMethods.listByUser(userId, (err, methods) => {
+      if (err) console.error('Payment methods load failed:', err);
+      return UserController.renderCheckoutWithProfile(req, res, {
+        cartItems,
+        savedCards: Array.isArray(methods) ? methods : [],
+        ...totals
+      });
+    });
+  }
 
-  res.render('checkout', {
+  return UserController.renderCheckoutWithProfile(req, res, {
     cartItems,
+    savedCards: [],
     ...totals
   });
 }
@@ -181,20 +195,45 @@ function processCheckout(req, res) {
     return res.redirect('/checkout');
   }
 
+  let selectedSavedCard = null;
   if (req.body.paymentMethod === 'card') {
-    const cardNumber = (req.body.cardNumber || '').replace(/\s+/g, '');
-    const cardCvv = (req.body.cardCvv || '').trim();
-    const cardExpiry = (req.body.cardExpiry || '').trim();
-    const cardMissing = [];
-    if (!cardNumber) cardMissing.push('card number');
-    if (!cardExpiry) cardMissing.push('expiry');
-    if (!cardCvv) cardMissing.push('CVV');
-    if (cardMissing.length) {
-      req.flash('error', `Please enter your ${cardMissing.join(', ')} to pay by card.`);
-      return res.redirect('/checkout');
+    const savedId = req.body.savedPaymentMethod;
+    if (savedId) {
+      const userId = req.session.user && req.session.user.id;
+      return PaymentMethods.getForUser(savedId, userId, (pmErr, pm) => {
+        if (pmErr || !pm) {
+          req.flash('error', 'Saved card not found. Please re-enter card details.');
+          return res.redirect('/checkout');
+        }
+        selectedSavedCard = pm;
+        continueCheckout();
+      });
+    } else {
+      const cardNumber = (req.body.cardNumber || '').replace(/\s+/g, '');
+      const cardCvv = (req.body.cardCvv || '').trim();
+      const cardExpiry = (req.body.cardExpiry || '').trim();
+      const cardMissing = [];
+      if (!cardNumber) cardMissing.push('card number');
+      if (!cardExpiry) cardMissing.push('expiry');
+      if (!cardCvv) cardMissing.push('CVV');
+      if (cardMissing.length) {
+        req.flash('error', `Please enter your ${cardMissing.join(', ')} to pay by card.`);
+        return res.redirect('/checkout');
+      }
+      continueCheckout();
     }
+  } else {
+    continueCheckout();
   }
 
+  function continueCheckout() {
+    if (req.body.paymentMethod === 'card' && selectedSavedCard) {
+      req.body.cardNumber = selectedSavedCard.cardToken || `**** **** **** ${selectedSavedCard.last4}`;
+      req.body.cardExpiry = `${selectedSavedCard.expMonth || 'MM'} / ${selectedSavedCard.expYear || 'YY'}`;
+      req.body.cardCvv = '***';
+    }
+
+    // main checkout flow continues here
   const totals = calculateTotals(cartItems);
   const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
   const isPayNow = req.body.paymentMethod === 'paynow';
@@ -265,6 +304,8 @@ function processCheckout(req, res) {
     return finalizeOrder();
   });
 }
+
+  }
 
 function renderPayNow(req, res) {
   const order = req.session.lastOrder;

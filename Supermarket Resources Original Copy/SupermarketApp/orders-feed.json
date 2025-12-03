@@ -1,5 +1,70 @@
 [
   {
+    "invoiceNumber": "INV-28596072",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-28596072",
+      "amount": "8.64",
+      "payload": "PAYNOW|INV:INV-28596072|AMT:8.64|NAME:winnie|EMAIL:winnie@gmail.com"
+    },
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2025-12-03T02:23:16.077Z"
+  },
+  {
+    "invoiceNumber": "INV-28099936",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-28099936",
+      "amount": "15.72",
+      "payload": "PAYNOW|INV:INV-28099936|AMT:15.72|NAME:winnie|EMAIL:winnie@gmail.com"
+    },
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      },
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 2,
+        "price": 1.5,
+        "subtotal": 3
+      }
+    ],
+    "subtotal": 8,
+    "gst": 0.72,
+    "shipping": 7,
+    "total": 15.72,
+    "placedAt": "2025-12-03T02:14:59.951Z"
+  },
+  {
     "invoiceNumber": "INV-87501928",
     "customer": {
       "fullName": "sarahlee",

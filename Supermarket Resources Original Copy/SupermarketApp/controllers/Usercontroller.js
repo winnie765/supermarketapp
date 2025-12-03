@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const CartModel = require('../models/cart');
+const PaymentMethods = require('../models/paymentMethods');
+const UserController = {}; // forward reference for checkout helper
 
 function renderRegister(req, res) {
   res.render('register', { 
@@ -99,9 +101,13 @@ function renderProfile(req, res) {
   User.findById(userId, (err, user) => {
     if (err) console.error('Profile fetch error:', err);
     const viewUser = user || req.session.user;
-    res.render('profile', {
-      user: viewUser,
-      messages: res.locals.messages || { error: [], success: [] }
+    PaymentMethods.listByUser(userId, (pmErr, methods) => {
+      if (pmErr) console.error('Payment methods fetch error:', pmErr);
+      res.render('profile', {
+        user: viewUser,
+        paymentMethods: Array.isArray(methods) ? methods : [],
+        messages: res.locals.messages || { error: [], success: [] }
+      });
     });
   });
 }
@@ -119,34 +125,62 @@ function updateProfile(req, res) {
     return res.redirect('/profile');
   }
 
-  User.update(userId, { username, email, contact, address, paymentMethod }, (err) => {
+  User.update(userId, { username, email, contact, address }, (err) => {
     if (err) {
       console.error('Profile update error:', err);
       req.flash('error', 'Could not update profile.');
       return res.redirect('/profile');
     }
-    User.findById(userId, (freshErr, freshUser) => {
-      if (freshErr) console.error('Profile reload error:', freshErr);
-      const updatedSessionUser = freshUser || { ...req.session.user, username, email, contact, address };
-      // Persist the entered card digits in session for display even if DB schema lacks the column
-      if (paymentMethod) {
-        updatedSessionUser.paymentMethod = paymentMethod;
-        updatedSessionUser.payment_method = paymentMethod;
-      }
-      req.session.user = updatedSessionUser;
-      req.flash('success', 'Changes saved.');
-      req.session.save(() => res.redirect('/profile'));
+    const persistPayment = (next) => {
+      if (!paymentMethod) return next();
+      const last4 = paymentMethod.slice(-4);
+      const brand = paymentMethod.startsWith('3') ? 'AMEX'
+        : paymentMethod.startsWith('5') ? 'MasterCard'
+        : paymentMethod.startsWith('4') ? 'VISA'
+        : 'Card';
+      const rawExpiry = (req.body && req.body.cardExpiry) ? String(req.body.cardExpiry) : '';
+      const expDigits = rawExpiry.replace(/\D/g, '');
+      const expMonth = expDigits.slice(0, 2) || null;
+      const expYear = expDigits.slice(2, 4) || null;
+      const cardholderName = (req.body && req.body.cardName) ? String(req.body.cardName) : null;
+      PaymentMethods.add({ userId, brand, last4, expMonth, expYear, cardholderName, cardToken: paymentMethod }, (pmErr) => {
+        if (pmErr) console.error('Payment method save error:', pmErr);
+        next();
+      });
+    };
+
+    persistPayment(() => {
+      User.findById(userId, (freshErr, freshUser) => {
+        if (freshErr) console.error('Profile reload error:', freshErr);
+        const updatedSessionUser = freshUser || { ...req.session.user, username, email, contact, address };
+        req.session.user = updatedSessionUser;
+        req.flash('success', 'Changes saved.');
+        req.session.save(() => res.redirect('/profile'));
+      });
     });
   });
 }
 
-module.exports = {
-  renderRegister,
-  registerUser: register,
-  renderLogin,
-  loginUser: login,
-  logout,
-  requireAuth,
-  renderProfile,
-  updateProfile
+UserController.renderRegister = renderRegister;
+UserController.registerUser = register;
+UserController.renderLogin = renderLogin;
+UserController.loginUser = login;
+UserController.logout = logout;
+UserController.requireAuth = requireAuth;
+UserController.renderProfile = renderProfile;
+UserController.updateProfile = updateProfile;
+UserController.renderCheckoutWithProfile = function renderCheckoutWithProfile(req, res, locals) {
+  const user = req.session.user || {};
+  const prefill = {
+    fullName: user.username || '',
+    email: user.email || '',
+    address: user.address || '',
+    paymentMethod: user.payment_method || user.paymentMethod || ''
+  };
+  res.render('checkout', {
+    prefill,
+    ...locals
+  });
 };
+
+module.exports = UserController;

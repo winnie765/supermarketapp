@@ -1,10 +1,10 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const Supermarket = require('../models/Supermarket');
 const CartModel = require('../models/cart');
 const PaymentMethods = require('../models/paymentMethods');
 const UserController = require('./Usercontroller');
+const CheckoutModel = require('../models/checkout');
 
 // In-memory, user-scoped order history so it survives logout/login (per server run)
 const orderHistoryStore = new Map(); // key => [orders]
@@ -341,7 +341,7 @@ function processCheckout(req, res) {
       });
     };
 
-    Supermarket.adjustStockForCart(cartItems, (stockErr, result) => {
+    CheckoutModel.adjustStockForCart(cartItems, (stockErr, result) => {
       if (stockErr) {
         if (stockErr.code === 'INSUFFICIENT_STOCK') {
           const name = stockErr.productName || `Product ${stockErr.productId}`;

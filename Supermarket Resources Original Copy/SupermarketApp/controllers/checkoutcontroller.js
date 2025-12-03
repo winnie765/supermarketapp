@@ -195,9 +195,16 @@ function renderCheckout(req, res) {
   if (userId && PaymentMethods && typeof PaymentMethods.listByUser === 'function') {
     return PaymentMethods.listByUser(userId, (err, methods) => {
       if (err) console.error('Payment methods load failed:', err);
+      const dbCards = Array.isArray(methods) ? methods : [];
+      const cached = Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : [];
+      const combined = [...dbCards];
+      cached.forEach((c) => {
+        const already = dbCards.some((d) => d.id && c.id && String(d.id) === String(c.id));
+        if (!already) combined.push(c);
+      });
       return UserController.renderCheckoutWithProfile(req, res, {
         cartItems,
-        savedCards: Array.isArray(methods) ? methods : [],
+        savedCards: combined,
         ...totals
       });
     });
@@ -205,7 +212,7 @@ function renderCheckout(req, res) {
 
   return UserController.renderCheckoutWithProfile(req, res, {
     cartItems,
-    savedCards: [],
+    savedCards: Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : [],
     ...totals
   });
 }
@@ -226,6 +233,7 @@ function processCheckout(req, res) {
   }
 
   let selectedSavedCard = null;
+  let cardToSave = null;
   if (req.body.paymentMethod === 'card') {
     const savedId = req.body.savedPaymentMethod;
     if (savedId) {
@@ -250,6 +258,24 @@ function processCheckout(req, res) {
         req.flash('error', `Please enter your ${cardMissing.join(', ')} to pay by card.`);
         return res.redirect('/checkout');
       }
+      // prepare new card payload for optional saving
+      const expParts = cardExpiry.replace(/\s+/g, '').split(/[\/-]/);
+      const expMonth = expParts[0] || null;
+      const expYear = expParts[1] || null;
+      if (req.session.user && req.session.user.id && req.body.saveCard) {
+        cardToSave = {
+          userId: req.session.user.id,
+          brand: 'Card',
+          label: req.body.cardName || 'Card',
+          cardholderName: req.body.cardName || req.body.fullName,
+          last4: cardNumber.slice(-4),
+          expMonth,
+          expYear,
+          expiry: cardExpiry,
+          cvv: req.body.cardCvv || null,
+          cardToken: cardNumber
+        };
+      }
       continueCheckout();
     }
   } else {
@@ -264,78 +290,100 @@ function processCheckout(req, res) {
     }
 
     // main checkout flow continues here
-  const totals = calculateTotals(cartItems);
-  const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
-  const isPayNow = req.body.paymentMethod === 'paynow';
-  const cardNumber = (req.body.cardNumber || '').replace(/\s+/g, '');
-  const cardLast4 = req.body.paymentMethod === 'card' && cardNumber.length >= 4
-    ? cardNumber.slice(-4)
-    : null;
-  const customer = {
-    fullName: req.body.fullName,
-    email: req.body.email,
-    address: req.body.address,
-    paymentMethod: req.body.paymentMethod,
-    cardLast4
-  };
-
-  const finalizeOrder = () => {
-    const orderRecord = {
-      invoiceNumber,
-      customer,
-      paynow: isPayNow ? buildPayNowPayload({ invoiceNumber, total: totals.total, customer }) : null,
-      cartItems,
-      ...totals,
-      placedAt: new Date().toISOString()
+    const totals = calculateTotals(cartItems);
+    const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
+    const isPayNow = req.body.paymentMethod === 'paynow';
+    const cardNumber = (req.body.cardNumber || '').replace(/\s+/g, '');
+    const cardLast4 = req.body.paymentMethod === 'card' && cardNumber.length >= 4
+      ? cardNumber.slice(-4)
+      : null;
+    const customer = {
+      fullName: req.body.fullName,
+      email: req.body.email,
+      address: req.body.address,
+      paymentMethod: req.body.paymentMethod,
+      cardLast4
     };
 
-    req.session.lastOrder = orderRecord;
-    const history = Array.isArray(req.session.orderHistory) ? req.session.orderHistory : [];
-    history.unshift(orderRecord);
-    // keep recent 20 orders max to avoid unbounded session growth
-    req.session.orderHistory = history.slice(0, 20);
-    // also keep a per-user record that survives logout/login for the same account
-    recordOrderForUser(req.session.user, orderRecord);
-    // keep a global feed for admins
-    recordGlobalOrder(orderRecord);
-    if (req.session.user && req.session.user.id) {
-      CartModel.clearUserCart(req.session.user.id, (err) => {
-        if (err) console.error('Failed to clear DB cart after checkout:', err);
+    const finalizeOrder = () => {
+      const orderRecord = {
+        invoiceNumber,
+        customer,
+        paynow: isPayNow ? buildPayNowPayload({ invoiceNumber, total: totals.total, customer }) : null,
+        cartItems,
+        ...totals,
+        placedAt: new Date().toISOString()
+      };
+
+      req.session.lastOrder = orderRecord;
+      const history = Array.isArray(req.session.orderHistory) ? req.session.orderHistory : [];
+      history.unshift(orderRecord);
+      // keep recent 20 orders max to avoid unbounded session growth
+      req.session.orderHistory = history.slice(0, 20);
+      // also keep a per-user record that survives logout/login for the same account
+      recordOrderForUser(req.session.user, orderRecord);
+      // keep a global feed for admins
+      recordGlobalOrder(orderRecord);
+      if (req.session.user && req.session.user.id) {
+        CartModel.clearUserCart(req.session.user.id, (err) => {
+          if (err) console.error('Failed to clear DB cart after checkout:', err);
+        });
+      }
+      req.session.cart = [];
+      req.flash('success', `Order placed! An invoice has been generated for ${req.body.email}.`);
+
+      return req.session.save(() => {
+        if (isPayNow) {
+          req.session.pendingPayNow = true;
+          return res.redirect('/paynow');
+        }
+        return res.redirect('/invoice');
       });
-    }
-    req.session.cart = [];
-    req.flash('success', `Order placed! An invoice has been generated for ${req.body.email}.`);
+    };
 
-    return req.session.save(() => {
-      if (isPayNow) {
-        req.session.pendingPayNow = true;
-        return res.redirect('/paynow');
+    Supermarket.adjustStockForCart(cartItems, (stockErr, result) => {
+      if (stockErr) {
+        if (stockErr.code === 'INSUFFICIENT_STOCK') {
+          const name = stockErr.productName || `Product ${stockErr.productId}`;
+          req.flash('error', `Not enough stock for ${name}. Available: ${stockErr.available}, requested: ${stockErr.requested}.`);
+        } else {
+          console.error('Stock update failed:', stockErr);
+          req.flash('error', 'Unable to update stock. Please try again.');
+        }
+        return res.redirect('/cart');
       }
-      return res.redirect('/invoice');
+
+      if (result && result.skipped) {
+        console.warn('Stock update skipped:', result.reason || 'No stock column available on products table');
+      }
+
+      return saveCardIfNeeded(cardToSave, req, finalizeOrder);
     });
-  };
-
-  Supermarket.adjustStockForCart(cartItems, (stockErr, result) => {
-    if (stockErr) {
-      if (stockErr.code === 'INSUFFICIENT_STOCK') {
-        const name = stockErr.productName || `Product ${stockErr.productId}`;
-        req.flash('error', `Not enough stock for ${name}. Available: ${stockErr.available}, requested: ${stockErr.requested}.`);
-      } else {
-        console.error('Stock update failed:', stockErr);
-        req.flash('error', 'Unable to update stock. Please try again.');
-      }
-      return res.redirect('/cart');
-    }
-
-    if (result && result.skipped) {
-      console.warn('Stock update skipped:', result.reason || 'No stock column available on products table');
-    }
-
-    return finalizeOrder();
-  });
+  }
 }
 
-  }
+function saveCardIfNeeded(cardPayload, req, next) {
+  if (!cardPayload) return next();
+  if (!PaymentMethods || typeof PaymentMethods.add !== 'function') return next();
+  return PaymentMethods.add(cardPayload, (err, result) => {
+    if (err) {
+      console.error('Failed to save card', err);
+      // still cache locally so user sees it in this session
+      const cache = Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : [];
+      const tempId = `temp-${Date.now()}`;
+      cache.unshift({ ...cardPayload, id: tempId });
+      req.session.savedCardsCache = cache.slice(0, 5);
+      return next();
+    }
+    // cache for the session so it appears on the next checkout even if DB load is delayed
+    const cache = Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : [];
+    const toStore = { ...cardPayload };
+    if (result && result.insertId) toStore.id = result.insertId;
+    cache.unshift(toStore);
+    req.session.savedCardsCache = cache.slice(0, 5); // keep it small
+    next();
+  });
+}
 
 function renderPayNow(req, res) {
   const order = req.session.lastOrder;

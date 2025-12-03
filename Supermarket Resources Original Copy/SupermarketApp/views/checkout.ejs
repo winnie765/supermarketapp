@@ -87,7 +87,7 @@
                   <select name="savedPaymentMethod" class="form-select" id="savedPaymentSelect">
                     <option value="">Use a new card</option>
                     <% savedCards.forEach(function(card) { %>
-                      <option value="<%= card.id %>"><%= (card.brand || 'Card') %> •••• <%= card.last4 %></option>
+                      <option value="<%= card.id %>"><%= (card.label || card.brand || "Card") %> ending <%= card.last4 %></option>
                     <% }); %>
                   </select>
                 </div>
@@ -141,6 +141,12 @@
                     <label class="form-label">CVV</label>
                     <input name="cardCvv" id="cardCvv" class="form-control" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="3" aria-label="Card CVV" pattern="\d{3}">
                   </div>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" value="1" id="saveCard" name="saveCard">
+                  <label class="form-check-label" for="saveCard">
+                    Save this card for next time
+                  </label>
                 </div>
                 <small class="text-muted d-block mt-2">Card details are required only for card payments.</small>
               </div>
@@ -219,4 +225,6 @@
   </script>
 </body>
 </html>
+
+
 

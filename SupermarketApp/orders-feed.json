@@ -1,0 +1,688 @@
+[
+  {
+    "invoiceNumber": "INV-01387844",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-01387844",
+      "amount": "12.45",
+      "payload": "PAYNOW|INV:INV-01387844|AMT:12.45|NAME:winnie chu|EMAIL:winnie@gmail.com"
+    },
+    "paypal": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-19T05:43:07.852Z"
+  },
+  {
+    "invoiceNumber": "INV-01141448",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-01141448",
+      "amount": "17.90",
+      "payload": "PAYNOW|INV:INV-01141448|AMT:17.90|NAME:winnie chu|EMAIL:winnie@gmail.com"
+    },
+    "paypal": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 2,
+        "price": 5,
+        "subtotal": 10
+      }
+    ],
+    "subtotal": 10,
+    "gst": 0.9,
+    "shipping": 7,
+    "total": 17.9,
+    "placedAt": "2026-01-19T05:39:01.459Z"
+  },
+  {
+    "invoiceNumber": "INV-99549992",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "40G819018C284560P",
+      "captureId": "21M11912SF271704R",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 3,
+        "price": 5,
+        "subtotal": 15
+      },
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      },
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 17.3,
+    "gst": 1.56,
+    "shipping": 7,
+    "total": 25.86,
+    "placedAt": "2026-01-19T05:15:57.975Z"
+  },
+  {
+    "invoiceNumber": "INV-63315726",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2025-12-04T15:48:35.746Z"
+  },
+  {
+    "invoiceNumber": "INV-35756496",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 6,
+        "price": 5,
+        "subtotal": 30
+      },
+      {
+        "id": "3",
+        "name": "Milk",
+        "quantity": 10,
+        "price": 3.5,
+        "subtotal": 35
+      }
+    ],
+    "subtotal": 65,
+    "gst": 5.85,
+    "shipping": 0,
+    "total": 70.85,
+    "placedAt": "2025-12-04T08:09:16.516Z",
+    "status": "Paid"
+  },
+  {
+    "invoiceNumber": "INV-10997063",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 21,
+        "price": 12.32,
+        "subtotal": 258.72
+      }
+    ],
+    "subtotal": 258.72,
+    "gst": 23.28,
+    "shipping": 0,
+    "total": 282,
+    "placedAt": "2025-12-04T01:16:37.067Z"
+  },
+  {
+    "invoiceNumber": "INV-10558958",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 1,
+        "price": 1.8,
+        "subtotal": 1.8
+      }
+    ],
+    "subtotal": 1.8,
+    "gst": 0.16,
+    "shipping": 7,
+    "total": 8.96,
+    "placedAt": "2025-12-04T01:09:18.965Z"
+  },
+  {
+    "invoiceNumber": "INV-79889966",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      }
+    ],
+    "subtotal": 12.32,
+    "gst": 1.11,
+    "shipping": 7,
+    "total": 20.43,
+    "placedAt": "2025-12-03T16:38:09.969Z",
+    "status": "Paid"
+  },
+  {
+    "invoiceNumber": "INV-79836039",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      },
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 17.32,
+    "gst": 1.56,
+    "shipping": 7,
+    "total": 25.88,
+    "placedAt": "2025-12-03T16:37:16.057Z",
+    "status": "Cash on Delivery"
+  },
+  {
+    "invoiceNumber": "INV-78258471",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2025-12-03T16:10:58.479Z",
+    "status": "Delivered"
+  },
+  {
+    "invoiceNumber": "INV-55267170",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "9999"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 1,
+        "price": 1.8,
+        "subtotal": 1.8
+      }
+    ],
+    "subtotal": 1.8,
+    "gst": 0.16,
+    "shipping": 7,
+    "total": 8.96,
+    "placedAt": "2025-12-03T09:47:47.178Z"
+  },
+  {
+    "invoiceNumber": "INV-55121969",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "1111"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      }
+    ],
+    "subtotal": 12.32,
+    "gst": 1.11,
+    "shipping": 7,
+    "total": 20.43,
+    "placedAt": "2025-12-03T09:45:21.984Z",
+    "status": "Delivered"
+  },
+  {
+    "invoiceNumber": "INV-55008689",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2025-12-03T09:43:28.692Z",
+    "status": "Paid"
+  },
+  {
+    "invoiceNumber": "INV-54854021",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "5432"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "1",
+        "name": "Apples",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2025-12-03T09:40:54.037Z",
+    "status": "Paid"
+  },
+  {
+    "invoiceNumber": "INV-54442553",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2025-12-03T09:34:02.555Z"
+  },
+  {
+    "invoiceNumber": "INV-54368916",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "2123"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      },
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      }
+    ],
+    "subtotal": 17.32,
+    "gst": 1.56,
+    "shipping": 7,
+    "total": 25.88,
+    "placedAt": "2025-12-03T09:32:48.941Z"
+  },
+  {
+    "invoiceNumber": "INV-53062125",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7654"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 3,
+        "price": 5,
+        "subtotal": 15
+      }
+    ],
+    "subtotal": 15,
+    "gst": 1.35,
+    "shipping": 7,
+    "total": 23.35,
+    "placedAt": "2025-12-03T09:11:02.140Z"
+  },
+  {
+    "invoiceNumber": "INV-40822181",
+    "customer": {
+      "fullName": "sarahlee",
+      "email": "sarahlee@gmail.com",
+      "address": "Woodlands",
+      "paymentMethod": "card",
+      "cardLast4": "3456"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 6,
+        "price": 1.5,
+        "subtotal": 9
+      },
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      }
+    ],
+    "subtotal": 21.32,
+    "gst": 1.92,
+    "shipping": 7,
+    "total": 30.240000000000002,
+    "placedAt": "2025-12-03T05:47:02.213Z"
+  },
+  {
+    "invoiceNumber": "INV-40035234",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "7777"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 1,
+        "price": 12.32,
+        "subtotal": 12.32
+      }
+    ],
+    "subtotal": 12.32,
+    "gst": 1.11,
+    "shipping": 7,
+    "total": 20.43,
+    "placedAt": "2025-12-03T05:33:55.241Z"
+  },
+  {
+    "invoiceNumber": "INV-32158828",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "card",
+      "cardLast4": "1231"
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "22",
+        "name": "cheese",
+        "quantity": 2,
+        "price": 12.32,
+        "subtotal": 24.64
+      },
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 12,
+        "price": 5,
+        "subtotal": 60
+      }
+    ],
+    "subtotal": 84.64,
+    "gst": 7.62,
+    "shipping": 0,
+    "total": 92.26,
+    "placedAt": "2025-12-03T03:22:38.839Z",
+    "status": "Cancelled"
+  },
+  {
+    "invoiceNumber": "INV-28596072",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-28596072",
+      "amount": "8.64",
+      "payload": "PAYNOW|INV:INV-28596072|AMT:8.64|NAME:winnie|EMAIL:winnie@gmail.com"
+    },
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2025-12-03T02:23:16.077Z"
+  },
+  {
+    "invoiceNumber": "INV-28099936",
+    "customer": {
+      "fullName": "winnie",
+      "email": "winnie@gmail.com",
+      "address": "Blk 453 Choa Chu Kang Ave 4",
+      "paymentMethod": "paynow",
+      "cardLast4": null
+    },
+    "paynow": {
+      "reference": "INV-28099936",
+      "amount": "15.72",
+      "payload": "PAYNOW|INV:INV-28099936|AMT:15.72|NAME:winnie|EMAIL:winnie@gmail.com"
+    },
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      },
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 2,
+        "price": 1.5,
+        "subtotal": 3
+      }
+    ],
+    "subtotal": 8,
+    "gst": 0.72,
+    "shipping": 7,
+    "total": 15.72,
+    "placedAt": "2025-12-03T02:14:59.951Z"
+  },
+  {
+    "invoiceNumber": "INV-87501928",
+    "customer": {
+      "fullName": "sarahlee",
+      "email": "sarahlee@gmail.com",
+      "address": "woodlands ",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 10,
+        "price": 1.8,
+        "subtotal": 18
+      }
+    ],
+    "subtotal": 18,
+    "gst": 1.62,
+    "shipping": 0,
+    "total": 19.62,
+    "placedAt": "2025-12-02T14:58:21.942Z"
+  },
+  {
+    "invoiceNumber": "INV-58613609",
+    "customer": {
+      "fullName": "sarahlee",
+      "email": "sarahlee@gmail.com",
+      "address": "woodlands ",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "shipping": 0,
+    "total": 5,
+    "placedAt": "2025-12-01T03:10:13.616Z"
+  }
+]

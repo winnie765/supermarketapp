@@ -198,6 +198,20 @@ body.home-page {
   font-weight: 600;
 }
 
+/* Dark green button for tracking */
+.btn-dark-green {
+  background: #2f6d1f;
+  color: #fff;
+  border-radius: 999px;
+  border: 2px solid #2f6d1f;
+  font-weight: 600;
+}
+.btn-dark-green:hover {
+  background: #245917;
+  border-color: #245917;
+  color: #fff;
+}
+
 /* Hero visual */
 .hero-visual {
   flex: 1;
@@ -259,4 +273,35 @@ body.home-page {
 .navbar-lime .btn-outline-light:hover {
   background: #f6ffd9;
   color: #4c7b05;
+}
+
+/* Reusable pill style matching navbar links */
+.nav-pill {
+  display: inline-block;
+  background: #78c20e;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.45rem 0.95rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  text-decoration: none;
+}
+.nav-pill:hover {
+  color: #4c7b05;
+  background: #f6ffd9;
+}
+
+/* Pill shape without forcing colors */
+.pill-shape {
+  border-radius: 999px !important;
+  padding: 0.45rem 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Larger button size for emphasis */
+.btn-xl {
+  padding: 0.75rem 2.2rem;
+  font-size: 1.2rem;
 }

@@ -261,6 +261,9 @@ app.get('/paynow', checkAuthenticated, ensureFn(CheckoutController.renderPayNow,
 app.get('/invoice', checkAuthenticated, ensureFn(CheckoutController.renderInvoice, 'CheckoutController.renderInvoice'));
 app.get('/orders', checkAuthenticated, ensureFn(CheckoutController.renderOrderHistory, 'CheckoutController.renderOrderHistory'));
 app.get('/orders/:invoice', checkAuthenticated, ensureFn(CheckoutController.viewOrderFromHistory, 'CheckoutController.viewOrderFromHistory'));
+app.get('/orders/:invoice/track', checkAuthenticated, ensureFn(CheckoutController.renderOrderTracking, 'CheckoutController.renderOrderTracking'));
+app.get('/orders/:invoice/cancel', checkAuthenticated, ensureFn(CheckoutController.renderCancelOrderPage, 'CheckoutController.renderCancelOrderPage'));
+app.post('/orders/:invoice/cancel', checkAuthenticated, ensureFn(CheckoutController.cancelOrderForUser, 'CheckoutController.cancelOrderForUser'));
 
 // Admin dashboard
 app.get('/admin', checkAuthenticated, checkAdmin, AdminController.renderAdmin);

@@ -1,5 +1,71 @@
 [
   {
+    "invoiceNumber": "INV-21437648",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "4JB81593AW543183R",
+      "captureId": "3CL84966EE3060117",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Delivered",
+    "statusUpdatedAt": "2026-01-20T15:05:59.602Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-20T15:05:29.056Z",
+    "shippingStatus": "Delivered",
+    "shippingUpdatedAt": "2026-01-20T15:05:59.602Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-20T15:05:29.056Z"
+  },
+  {
+    "invoiceNumber": "INV-18170205",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "applepay",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Cancelled",
+    "statusUpdatedAt": "2026-01-20T15:02:49.887Z",
+    "cartItems": [
+      {
+        "id": "3",
+        "name": "Milk",
+        "quantity": 1,
+        "price": 3.5,
+        "subtotal": 3.5
+      }
+    ],
+    "subtotal": 3.5,
+    "gst": 0.32,
+    "shipping": 7,
+    "total": 10.82,
+    "placedAt": "2026-01-20T14:09:30.218Z",
+    "shippingStatus": "Cancelled",
+    "shippingUpdatedAt": "2026-01-20T15:02:49.887Z"
+  },
+  {
     "invoiceNumber": "INV-01387844",
     "customer": {
       "fullName": "winnie chu",
@@ -27,7 +93,11 @@
     "gst": 0.45,
     "shipping": 7,
     "total": 12.45,
-    "placedAt": "2026-01-19T05:43:07.852Z"
+    "placedAt": "2026-01-19T05:43:07.852Z",
+    "shippingStatus": "Cancelled",
+    "shippingUpdatedAt": "2026-01-20T15:02:46.773Z",
+    "status": "Cancelled",
+    "statusUpdatedAt": "2026-01-20T15:02:46.774Z"
   },
   {
     "invoiceNumber": "INV-01141448",
@@ -57,7 +127,11 @@
     "gst": 0.9,
     "shipping": 7,
     "total": 17.9,
-    "placedAt": "2026-01-19T05:39:01.459Z"
+    "placedAt": "2026-01-19T05:39:01.459Z",
+    "shippingStatus": "Delivered",
+    "shippingUpdatedAt": "2026-01-20T15:03:07.149Z",
+    "status": "Delivered",
+    "statusUpdatedAt": "2026-01-20T15:03:07.149Z"
   },
   {
     "invoiceNumber": "INV-99549992",
@@ -126,7 +200,11 @@
     "gst": 0.45,
     "shipping": 7,
     "total": 12.45,
-    "placedAt": "2025-12-04T15:48:35.746Z"
+    "placedAt": "2025-12-04T15:48:35.746Z",
+    "shippingStatus": "Delivered",
+    "shippingUpdatedAt": "2026-01-20T15:03:04.097Z",
+    "status": "Delivered",
+    "statusUpdatedAt": "2026-01-20T15:03:04.097Z"
   },
   {
     "invoiceNumber": "INV-35756496",
@@ -159,7 +237,10 @@
     "shipping": 0,
     "total": 70.85,
     "placedAt": "2025-12-04T08:09:16.516Z",
-    "status": "Paid"
+    "status": "Delivered",
+    "shippingStatus": "Delivered",
+    "shippingUpdatedAt": "2026-01-20T15:03:00.178Z",
+    "statusUpdatedAt": "2026-01-20T15:03:00.178Z"
   },
   {
     "invoiceNumber": "INV-10997063",

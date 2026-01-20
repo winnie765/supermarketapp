@@ -166,12 +166,13 @@ function updateUser(req, res) {
 function updateOrderStatus(req, res) {
   const { orderId } = req.params;
   const status = req.body.status;
+  const kind = req.body.kind || 'shipping';
   if (!orderId || !status) {
     req.flash('error', 'Invalid order or status');
     return res.redirect('/admin');
   }
   const ok = typeof CheckoutController.setOrderStatus === 'function'
-    ? CheckoutController.setOrderStatus(orderId, status)
+    ? CheckoutController.setOrderStatus(orderId, status, kind)
     : false;
   if (!ok) {
     req.flash('error', 'Failed to update order status');

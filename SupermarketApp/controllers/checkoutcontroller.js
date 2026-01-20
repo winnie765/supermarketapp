@@ -91,7 +91,7 @@ function getRecentOrders(limit = 5) {
   return unique.slice(0, safeLimit);
 }
 
-function setOrderStatus(orderKey, status) {
+function setOrderStatus(orderKey, status, kind = 'shipping') {
   if (!orderKey) return false;
   const target = String(orderKey).toLowerCase();
   const applyStatus = (order) => {
@@ -99,7 +99,15 @@ function setOrderStatus(orderKey, status) {
     const invMatch = (order.invoiceNumber && String(order.invoiceNumber).toLowerCase() === target);
     const numMatch = (order.orderNumber && String(order.orderNumber).toLowerCase() === target);
     if (idMatch || invMatch || numMatch) {
-      order.status = status;
+      if (kind === 'payment') {
+        order.paymentStatus = status;
+        order.paymentUpdatedAt = new Date().toISOString();
+      } else {
+        order.shippingStatus = status;
+        order.shippingUpdatedAt = new Date().toISOString();
+        order.status = status;
+        order.statusUpdatedAt = new Date().toISOString();
+      }
       return true;
     }
     return false;
@@ -185,11 +193,18 @@ function buildPayNowPayload({ invoiceNumber, total, customer }) {
 }
 
 function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer, paynowPayload, paypalPayload }, responseMode = 'redirect') {
+  const paymentStatus = customer.paymentMethod === 'cash' ? 'Cash on Delivery' : 'Paid';
   const orderRecord = {
     invoiceNumber,
     customer,
     paynow: paynowPayload || null,
     paypal: paypalPayload || null,
+    status: 'Processing',
+    statusUpdatedAt: new Date().toISOString(),
+    paymentStatus,
+    paymentUpdatedAt: new Date().toISOString(),
+    shippingStatus: 'Processing',
+    shippingUpdatedAt: new Date().toISOString(),
     cartItems,
     ...totals,
     placedAt: new Date().toISOString()
@@ -578,6 +593,61 @@ function viewOrderFromHistory(req, res) {
   return res.redirect('/invoice');
 }
 
+function renderOrderTracking(req, res) {
+  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
+  const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
+  if (!order) {
+    req.flash('error', 'Order not found in your history.');
+    return res.redirect('/orders');
+  }
+  return res.render('orderTracking', {
+    user: req.session.user,
+    order,
+    messages: req.flash()
+  });
+}
+
+function renderCancelOrderPage(req, res) {
+  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
+  const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
+  if (!order) {
+    req.flash('error', 'Order not found in your history.');
+    return res.redirect('/orders');
+  }
+  return res.render('orderCancel', {
+    user: req.session.user,
+    order,
+    messages: req.flash()
+  });
+}
+
+function cancelOrderForUser(req, res) {
+  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
+  const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
+  if (!order) {
+    req.flash('error', 'Order not found in your history.');
+    return res.redirect('/orders');
+  }
+
+  const current = String(order.shippingStatus || order.status || '').toLowerCase();
+  if (current.includes('cancel')) {
+    req.flash('error', 'This order is already cancelled.');
+    return res.redirect('/orders');
+  }
+  if (current.includes('deliver')) {
+    req.flash('error', 'Delivered orders cannot be cancelled.');
+    return res.redirect('/orders');
+  }
+
+  const ok = setOrderStatus(order.invoiceNumber, 'Cancelled', 'shipping');
+  if (!ok) {
+    req.flash('error', 'Unable to cancel this order right now.');
+  } else {
+    req.flash('success', 'Order cancelled successfully.');
+  }
+  return res.redirect('/orders');
+}
+
 module.exports = {
   renderCheckout,
   processCheckout,
@@ -585,6 +655,9 @@ module.exports = {
   renderInvoice,
   renderOrderHistory,
   viewOrderFromHistory,
+  renderOrderTracking,
+  renderCancelOrderPage,
+  cancelOrderForUser,
   createPayPalOrder,
   capturePayPalOrder,
   getRecentOrders,

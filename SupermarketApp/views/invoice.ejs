@@ -133,9 +133,10 @@
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mt-3 invoice-actions">
       <div class="download-note text-muted small">You can print or save as PDF directly from your browser.</div>
       <div class="d-flex gap-2">
-        <a href="/shopping" class="btn btn-outline-secondary">Continue Shopping</a>
-        <button class="btn btn-outline-primary" onclick="downloadInvoice()">Download</button>
-        <button class="btn btn-success" onclick="window.print()">Print</button>
+        <a href="/shopping" class="nav-pill">Continue Shopping</a>
+        <a href="/orders/<%= order.invoiceNumber %>/track" class="btn btn-outline-success pill-shape">Track Order</a>
+        <button class="btn btn-outline-primary pill-shape" onclick="downloadInvoice()">Download</button>
+        <button class="btn btn-success pill-shape" onclick="window.print()">Print</button>
       </div>
     </div>
   </div>

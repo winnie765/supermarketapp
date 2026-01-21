@@ -1,5 +1,36 @@
 [
   {
+    "invoiceNumber": "INV-61976894",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "nets"
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Cancelled",
+    "statusUpdatedAt": "2026-01-21T02:21:37.177Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-21T02:20:14.953Z",
+    "shippingStatus": "Cancelled",
+    "shippingUpdatedAt": "2026-01-21T02:21:37.177Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 2,
+        "price": 5,
+        "subtotal": 10
+      }
+    ],
+    "subtotal": 10,
+    "gst": 0.9,
+    "shipping": 7,
+    "total": 17.9,
+    "placedAt": "2026-01-21T02:20:14.953Z"
+  },
+  {
     "invoiceNumber": "INV-21437648",
     "customer": {
       "fullName": "winnie chu",

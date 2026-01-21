@@ -10,6 +10,9 @@
     .tracking-card {
       border-radius: 16px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .tracking-dot {
       width: 14px;
@@ -103,29 +106,29 @@
               <h5 class="mb-0">Tracking Status</h5>
               <span class="badge <%= statusBadge %> text-uppercase"><%= statusRaw %></span>
             </div>
-            <div class="progress mb-4" style="height: 8px;">
-              <div class="progress-bar bg-success" role="progressbar" style="width: <%= progressPercent %>%"></div>
-            </div>
             <% if (isCancelled) { %>
-              <div class="alert alert-danger mb-4">This order has been cancelled. If you need help, contact support.</div>
+              <div class="alert alert-danger mb-4 text-center">This order has been cancelled, your refund is being processed.</div>
+            <% } else { %>
+              <div class="progress mb-4" style="height: 8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: <%= progressPercent %>%"></div>
+              </div>
+              <ol class="list-unstyled d-grid gap-3 mb-0">
+                <% steps.forEach((step, index) => { 
+                  const isDone = !isCancelled && currentIndex >= index;
+                  const isCurrent = !isCancelled && currentIndex === index;
+                  const dotClass = isDone ? 'bg-success' : 'bg-secondary';
+                  const labelClass = isCurrent ? 'text-success' : '';
+                %>
+                  <li class="d-flex gap-3 align-items-start">
+                    <span class="tracking-dot <%= dotClass %>"></span>
+                    <div>
+                      <div class="fw-semibold <%= labelClass %>"><%= step.label %></div>
+                      <div class="text-muted small"><%= step.hint %></div>
+                    </div>
+                  </li>
+                <% }) %>
+              </ol>
             <% } %>
-            <ol class="list-unstyled d-grid gap-3 mb-0">
-              <% steps.forEach((step, index) => { 
-                const isDone = !isCancelled && currentIndex >= index;
-                const isCurrent = !isCancelled && currentIndex === index;
-                const dotClass = isDone ? 'bg-success' : 'bg-secondary';
-                const labelClass = isCurrent ? 'text-success' : '';
-              %>
-                <li class="d-flex gap-3 align-items-start">
-                  <span class="tracking-dot <%= dotClass %>"></span>
-                  <div>
-                    <div class="fw-semibold <%= labelClass %>"><%= step.label %></div>
-                    <div class="text-muted small"><%= step.hint %></div>
-                  </div>
-                </li>
-              <% }) %>
-            </ol>
-          </div>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ const PaymentMethods = require('../models/paymentMethods');
 const UserController = require('./Usercontroller');
 const CheckoutModel = require('../models/checkout');
 const PayPal = require('../services/paypal');
+const netsQr = require('../services/nets');
 
 // In-memory, user-scoped order history so it survives logout/login (per server run)
 const orderHistoryStore = new Map(); // key => [orders]
@@ -192,9 +193,9 @@ function buildPayNowPayload({ invoiceNumber, total, customer }) {
   };
 }
 
-function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer, paynowPayload, paypalPayload }, responseMode = 'redirect') {
+function buildOrderRecord({ cartItems, totals, invoiceNumber, customer, paynowPayload, paypalPayload }) {
   const paymentStatus = customer.paymentMethod === 'cash' ? 'Cash on Delivery' : 'Paid';
-  const orderRecord = {
+  return {
     invoiceNumber,
     customer,
     paynow: paynowPayload || null,
@@ -209,7 +210,9 @@ function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer
     ...totals,
     placedAt: new Date().toISOString()
   };
+}
 
+function persistOrder(req, orderRecord) {
   req.session.lastOrder = orderRecord;
   const history = Array.isArray(req.session.orderHistory) ? req.session.orderHistory : [];
   history.unshift(orderRecord);
@@ -222,6 +225,12 @@ function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer
     });
   }
   req.session.cart = [];
+}
+
+function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer, paynowPayload, paypalPayload }, responseMode = 'redirect') {
+  const orderRecord = buildOrderRecord({ cartItems, totals, invoiceNumber, customer, paynowPayload, paypalPayload });
+
+  persistOrder(req, orderRecord);
   req.flash('success', `Order placed! An invoice has been generated for ${customer.email}.`);
 
   const redirectUrl = customer.paymentMethod === 'paynow' ? '/paynow' : '/invoice';
@@ -385,6 +394,77 @@ function processCheckout(req, res) {
       return saveCardIfNeeded(cardToSave, req, finalizeOrder);
     });
   }
+}
+
+function startNetsCheckout(req, res) {
+  const cartItems = getCartItems(req);
+  if (!cartItems.length) {
+    req.flash('error', 'Your cart is empty. Add items before checking out.');
+    return res.redirect('/checkout');
+  }
+
+  const requiredFields = ['fullName', 'email', 'address'];
+  const missing = requiredFields.filter(field => !(req.body[field] || '').trim());
+  if (missing.length) {
+    req.flash('error', 'Please complete all checkout fields before paying with NETS QR.');
+    return res.redirect('/checkout');
+  }
+
+  const totals = calculateTotals(cartItems);
+  const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
+  const customer = {
+    fullName: req.body.fullName,
+    email: req.body.email,
+    address: req.body.address,
+    paymentMethod: 'nets'
+  };
+
+  req.session.pendingNetsCheckout = {
+    invoiceNumber,
+    customer,
+    cartItems,
+    totals,
+    createdAt: new Date().toISOString()
+  };
+
+  req.body.cartTotal = totals.total.toFixed(2);
+  return req.session.save(() => netsQr.generateQrCode(req, res));
+}
+
+function finalizeNetsCheckout(req, res) {
+  const pending = req.session.pendingNetsCheckout;
+  if (!pending || !pending.cartItems || !pending.cartItems.length) {
+    const lastOrder = req.session.lastOrder;
+    if (lastOrder && lastOrder.customer && lastOrder.customer.paymentMethod === 'nets') {
+      return res.render('netsTxnSuccessStatus', { message: 'Transaction Successful!' });
+    }
+    req.flash('error', 'No pending NETS QR order found. Please checkout again.');
+    return res.redirect('/checkout');
+  }
+
+  const { cartItems, totals, invoiceNumber, customer } = pending;
+  CheckoutModel.adjustStockForCart(cartItems, (stockErr, result) => {
+    if (stockErr) {
+      if (stockErr.code === 'INSUFFICIENT_STOCK') {
+        const name = stockErr.productName || `Product ${stockErr.productId}`;
+        req.flash('error', `Not enough stock for ${name}. Please contact support.`);
+      } else {
+        console.error('Stock update failed:', stockErr);
+        req.flash('error', 'Unable to finalize your NETS order. Please contact support.');
+      }
+      return res.redirect('/checkout');
+    }
+
+    if (result && result.skipped) {
+      console.warn('Stock update skipped:', result.reason || 'No stock column available on products table');
+    }
+
+    req.session.pendingNetsCheckout = null;
+    const orderRecord = buildOrderRecord({ cartItems, totals, invoiceNumber, customer });
+    persistOrder(req, orderRecord);
+    req.flash('success', `Order placed! An invoice has been generated for ${customer.email}.`);
+    return req.session.save(() => res.render('netsTxnSuccessStatus', { message: 'Transaction Successful!' }));
+  });
 }
 
 async function createPayPalOrder(req, res) {
@@ -658,6 +738,8 @@ module.exports = {
   renderOrderTracking,
   renderCancelOrderPage,
   cancelOrderForUser,
+  startNetsCheckout,
+  finalizeNetsCheckout,
   createPayPalOrder,
   capturePayPalOrder,
   getRecentOrders,

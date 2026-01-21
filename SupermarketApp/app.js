@@ -22,7 +22,6 @@ const UserController = require('./controllers/Usercontroller');
 const AdminController = require('./controllers/admincontroller');
 const CartController = require('./controllers/cartcontroller');
 const CheckoutController = require('./controllers/checkoutcontroller');
-const netsQr = require('./services/nets');
 
 // Body parsers
 app.use(express.urlencoded({ extended: true }));
@@ -148,17 +147,18 @@ app.post('/profile', checkAuthenticated, ensureFn(UserController.updateProfile, 
 app.get('/logout', SupermarketController.logout);
 
 app.get("/", (req, res) => { res.render("shopping") })
-app.get("/nets-qr/success", (req, res) => {
-    res.render('netsTxnSuccessStatus', { message: 'Transaction Successful!' });
-});
-app.get("/nets-qr/fail", (req, res) => {
+app.get("/nets-qr/success", checkAuthenticated, ensureFn(CheckoutController.finalizeNetsCheckout, 'CheckoutController.finalizeNetsCheckout'));
+app.get("/nets-qr/fail", checkAuthenticated, (req, res) => {
+  req.session.pendingNetsCheckout = null;
+  return req.session.save(() => {
     res.render('netsTxnFailStatus', { message: 'Transaction Failed. Please try again.' });
-})
+  });
+});
 
 app.get('/generateNETSQR', checkAuthenticated, (req, res) => {
   res.render('netsQrStart', { title: 'NETS QR Payment' });
 });
-app.post('/generateNETSQR', checkAuthenticated, netsQr.generateQrCode);
+app.post('/generateNETSQR', checkAuthenticated, ensureFn(CheckoutController.startNetsCheckout, 'CheckoutController.startNetsCheckout'));
 
 
 //errors

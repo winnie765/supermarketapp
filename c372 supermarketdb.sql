@@ -48,6 +48,19 @@ INSERT INTO `carts` VALUES (93,4,19,1,'2025-12-03 13:47:13');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `wallets`
+--
+
+DROP TABLE IF EXISTS `wallets`;
+CREATE TABLE `wallets` (
+  `user_id` int NOT NULL,
+  `balance` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `fk_wallet_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+);
+
+--
 -- Table structure for table `invoice_items`
 --
 

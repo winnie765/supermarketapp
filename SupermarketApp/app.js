@@ -22,6 +22,8 @@ const UserController = require('./controllers/Usercontroller');
 const AdminController = require('./controllers/admincontroller');
 const CartController = require('./controllers/cartcontroller');
 const CheckoutController = require('./controllers/checkoutcontroller');
+const WalletController = require('./controllers/walletcontroller');
+const Wallet = require('./models/wallet');
 
 // Body parsers
 app.use(express.urlencoded({ extended: true }));
@@ -77,7 +79,18 @@ app.use((req, res, next) => {
       req.session.cart = [];
     }
   }
-  next();
+  if (req.session.user && req.session.user.id) {
+    return Wallet.getBalance(req.session.user.id, (err, balance) => {
+      if (err) {
+        console.error('Wallet balance load failed:', err);
+        res.locals.walletBalance = 0;
+      } else {
+        res.locals.walletBalance = Number(balance) || 0;
+      }
+      next();
+    });
+  }
+  return next();
 });
 
 // Auth middleware (define BEFORE routes)
@@ -144,6 +157,8 @@ app.get('/login', UserController.renderLogin);
 app.post('/login', ensureFn(UserController.loginUser, 'UserController.loginUser'));
 app.get('/profile', checkAuthenticated, ensureFn(UserController.renderProfile, 'UserController.renderProfile'));
 app.post('/profile', checkAuthenticated, ensureFn(UserController.updateProfile, 'UserController.updateProfile'));
+app.get('/wallet', checkAuthenticated, ensureFn(WalletController.renderWallet, 'WalletController.renderWallet'));
+app.post('/wallet/topup', checkAuthenticated, ensureFn(WalletController.topUpWallet, 'WalletController.topUpWallet'));
 app.get('/logout', SupermarketController.logout);
 
 app.get("/", (req, res) => { res.render("shopping") })

@@ -18,6 +18,7 @@
       ? Number(total)
       : netsSubtotal + netsGst + netsShipping;
   %>
+  <% const walletBalanceValue = Number(typeof walletBalance !== 'undefined' ? walletBalance : 0) || 0; %>
   <% const showSearch = false; %>
   <%- include('partials/nav', { user, showSearch }) %>
 
@@ -118,6 +119,15 @@
                     <input class="form-check-input" type="radio" name="paymentMethod" id="payCash" value="cash" checked>
                     <label class="form-check-label" for="payCash">Cash on Delivery</label>
                   </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payWallet" value="wallet">
+                    <label class="form-check-label" for="payWallet">
+                      Wallet <span class="text-muted">(Balance: $<%= walletBalanceValue.toFixed(2) %>)</span>
+                    </label>
+                    <div class="small text-muted ms-4">
+                      Need more credit? <a href="/wallet">Top up your wallet</a>.
+                    </div>
+                  </div>
                   <% if (hasPayPal) { %>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="paymentMethod" id="payPaypal" value="paypal">
@@ -149,6 +159,12 @@
       const checkoutForm = document.querySelector('form[action="/checkout"]');
       const placeOrderBtn = document.getElementById('place-order-btn');
       const paypalSection = document.getElementById('paypal-section');
+      const walletBalance = Number('<%= walletBalanceValue.toFixed(2) %>');
+      const cartTotalField = document.getElementById('cartTotal');
+      const getCartTotal = () => {
+        const raw = cartTotalField ? Number(cartTotalField.value) : NaN;
+        return Number.isFinite(raw) ? raw : 0;
+      };
       function toggleCardFields() {
         let method = 'cash';
         paymentRadios.forEach(r => { if (r.checked) method = r.value; });
@@ -163,6 +179,18 @@
         if (checkoutForm) {
           checkoutForm.action = isNets ? '/generateNETSQR' : '/checkout';
         }
+      }
+      if (checkoutForm) {
+        checkoutForm.addEventListener('submit', (e) => {
+          let method = 'cash';
+          paymentRadios.forEach(r => { if (r.checked) method = r.value; });
+          if (method !== 'wallet') return;
+          const total = getCartTotal();
+          if (walletBalance < total) {
+            e.preventDefault();
+            alert('Insufficient wallet balance. Please top up your wallet.');
+          }
+        });
       }
       paymentRadios.forEach(r => r.addEventListener('change', toggleCardFields));
       toggleCardFields();

@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const CartModel = require('../models/cart');
 const PaymentMethods = require('../models/paymentMethods');
+const Wallet = require('../models/wallet');
 const UserController = require('./Usercontroller');
 const CheckoutModel = require('../models/checkout');
 const PayPal = require('../services/paypal');
@@ -255,6 +256,28 @@ function renderCheckout(req, res) {
 
   const totals = calculateTotals(cartItems);
   const userId = req.session.user && req.session.user.id;
+  const renderWithWallet = (savedCards) => {
+    if (!userId) {
+      return UserController.renderCheckoutWithProfile(req, res, {
+        cartItems,
+        savedCards,
+        walletBalance: 0,
+        paypalClientId: process.env.PAYPAL_CLIENT_ID || '',
+        ...totals
+      });
+    }
+    return Wallet.getBalance(userId, (walletErr, balance) => {
+      if (walletErr) console.error('Wallet balance load failed:', walletErr);
+      return UserController.renderCheckoutWithProfile(req, res, {
+        cartItems,
+        savedCards,
+        walletBalance: Number(balance) || 0,
+        paypalClientId: process.env.PAYPAL_CLIENT_ID || '',
+        ...totals
+      });
+    });
+  };
+
   if (userId && PaymentMethods && typeof PaymentMethods.listByUser === 'function') {
     return PaymentMethods.listByUser(userId, (err, methods) => {
       if (err) console.error('Payment methods load failed:', err);
@@ -265,21 +288,11 @@ function renderCheckout(req, res) {
         const already = dbCards.some((d) => d.id && c.id && String(d.id) === String(c.id));
         if (!already) combined.push(c);
       });
-      return UserController.renderCheckoutWithProfile(req, res, {
-        cartItems,
-        savedCards: combined,
-        paypalClientId: process.env.PAYPAL_CLIENT_ID || '',
-        ...totals
-      });
+      return renderWithWallet(combined);
     });
   }
 
-  return UserController.renderCheckoutWithProfile(req, res, {
-    cartItems,
-    savedCards: Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : [],
-    paypalClientId: process.env.PAYPAL_CLIENT_ID || '',
-    ...totals
-  });
+  return renderWithWallet(Array.isArray(req.session.savedCardsCache) ? req.session.savedCardsCache : []);
 }
 
 function processCheckout(req, res) {
@@ -358,6 +371,7 @@ function processCheckout(req, res) {
     const totals = calculateTotals(cartItems);
     const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
     const isPayNow = req.body.paymentMethod === 'paynow';
+    const isWallet = req.body.paymentMethod === 'wallet';
     const cardNumber = (req.body.cardNumber || '').replace(/\s+/g, '');
     const cardLast4 = req.body.paymentMethod === 'card' && cardNumber.length >= 4
       ? cardNumber.slice(-4)
@@ -375,7 +389,7 @@ function processCheckout(req, res) {
       return completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer, paynowPayload });
     };
 
-    CheckoutModel.adjustStockForCart(cartItems, (stockErr, result) => {
+    const runStockUpdate = () => CheckoutModel.adjustStockForCart(cartItems, (stockErr, result) => {
       if (stockErr) {
         if (stockErr.code === 'INSUFFICIENT_STOCK') {
           const name = stockErr.productName || `Product ${stockErr.productId}`;
@@ -391,8 +405,53 @@ function processCheckout(req, res) {
         console.warn('Stock update skipped:', result.reason || 'No stock column available on products table');
       }
 
-      return saveCardIfNeeded(cardToSave, req, finalizeOrder);
+      const finalizeAfterPayment = () => {
+        if (!isWallet) {
+          return saveCardIfNeeded(cardToSave, req, finalizeOrder);
+        }
+        const userId = req.session.user && req.session.user.id;
+        if (!userId) {
+          req.flash('error', 'Wallet payments require a logged-in account.');
+          return res.redirect('/checkout');
+        }
+        return Wallet.charge(userId, totals.total, (walletErr, chargeResult) => {
+          if (walletErr) {
+            console.error('Wallet charge failed:', walletErr);
+            req.flash('error', 'Unable to charge wallet. Please try again.');
+            return res.redirect('/checkout');
+          }
+          if (!chargeResult || !chargeResult.ok) {
+            req.flash('error', 'Insufficient wallet balance. Please top up your wallet.');
+            return res.redirect('/checkout');
+          }
+          return saveCardIfNeeded(cardToSave, req, finalizeOrder);
+        });
+      };
+
+      return finalizeAfterPayment();
     });
+
+    if (isWallet) {
+      const userId = req.session.user && req.session.user.id;
+      if (!userId) {
+        req.flash('error', 'Wallet payments require a logged-in account.');
+        return res.redirect('/checkout');
+      }
+      return Wallet.getBalance(userId, (walletErr, balance) => {
+        if (walletErr) {
+          console.error('Wallet balance check failed:', walletErr);
+          req.flash('error', 'Unable to check wallet balance. Please try again.');
+          return res.redirect('/checkout');
+        }
+        if (Number(balance) < totals.total) {
+          req.flash('error', 'Insufficient wallet balance. Please top up your wallet.');
+          return res.redirect('/checkout');
+        }
+        return runStockUpdate();
+      });
+    }
+
+    return runStockUpdate();
   }
 }
 

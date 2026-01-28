@@ -39,7 +39,7 @@
       %>
       <div class="d-flex gap-2">
         <a class="btn btn-lime pill-shape" href="/orders">Back to orders</a>
-        <a class="btn btn-dark-green pill-shape" href="/orders/<%= order.invoiceNumber %>">View invoice</a>
+        <a class="btn btn-dark-green pill-shape" href="/invoice">View invoice</a>
         <% if (canCancel) { %>
           <a href="/orders/<%= order.invoiceNumber %>/cancel" class="btn btn-danger pill-shape">Cancel</a>
         <% } %>

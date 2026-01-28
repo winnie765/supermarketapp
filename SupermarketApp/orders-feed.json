@@ -1,5 +1,1533 @@
 [
   {
+    "invoiceNumber": "INV-72311688",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Out for Delivery",
+    "statusUpdatedAt": "2026-01-28T03:52:40.850Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:51:51.692Z",
+    "shippingStatus": "Out for Delivery",
+    "shippingUpdatedAt": "2026-01-28T03:52:40.850Z",
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2026-01-28T03:51:51.692Z"
+  },
+  {
+    "invoiceNumber": "INV-72279845",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "wallet",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Delivered",
+    "statusUpdatedAt": "2026-01-28T03:52:43.033Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:51:19.858Z",
+    "shippingStatus": "Delivered",
+    "shippingUpdatedAt": "2026-01-28T03:52:43.033Z",
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2026-01-28T03:51:19.858Z"
+  },
+  {
+    "invoiceNumber": "INV-72198148",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "82C3539402258533M",
+      "captureId": "8NS83111HC961715C",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Cancelled",
+    "statusUpdatedAt": "2026-01-28T03:52:26.549Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:50:14.140Z",
+    "shippingStatus": "Cancelled",
+    "shippingUpdatedAt": "2026-01-28T03:52:26.549Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-28T03:50:14.140Z"
+  },
+  {
+    "invoiceNumber": "INV-72112280",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "4CY6602619653542M",
+      "captureId": "8H035188DE7900409",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:48:42.304Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:48:42.304Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:48:42.304Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:48:42.304Z"
+  },
+  {
+    "invoiceNumber": "INV-72092007",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:48:12.018Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:48:12.018Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:48:12.018Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:48:12.018Z"
+  },
+  {
+    "invoiceNumber": "INV-71788748",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:43:08.765Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:43:08.765Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:43:08.766Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:43:08.766Z"
+  },
+  {
+    "invoiceNumber": "INV-71745241",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "4HE097467U674635V",
+      "captureId": "3YE68171L9120433T",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:42:37.015Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:42:37.015Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:42:37.015Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:42:37.015Z"
+  },
+  {
+    "invoiceNumber": "INV-71710117",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:41:50.130Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:41:50.130Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:41:50.130Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:41:50.130Z"
+  },
+  {
+    "invoiceNumber": "INV-71534682",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:38:54.694Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:38:54.694Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:38:54.694Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:38:54.694Z"
+  },
+  {
+    "invoiceNumber": "INV-71503422",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:38:23.436Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:38:23.436Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:38:23.436Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:38:23.436Z"
+  },
+  {
+    "invoiceNumber": "INV-71353620",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:35:53.641Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:35:53.641Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:35:53.641Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:35:53.641Z"
+  },
+  {
+    "invoiceNumber": "INV-71162376",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:32:42.392Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:32:42.392Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:32:42.392Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:32:42.392Z"
+  },
+  {
+    "invoiceNumber": "INV-71109912",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:31:49.924Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:31:49.924Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:31:49.924Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:31:49.924Z"
+  },
+  {
+    "invoiceNumber": "INV-70993367",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:29:53.378Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:29:53.378Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:29:53.378Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:29:53.379Z"
+  },
+  {
+    "invoiceNumber": "INV-70808598",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "2LJ31687R2329971N",
+      "captureId": "027780792H662815C",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:27:01.835Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:27:01.836Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:27:01.836Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:27:01.836Z"
+  },
+  {
+    "invoiceNumber": "INV-70671298",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:24:31.312Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:24:31.312Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:24:31.312Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:24:31.312Z"
+  },
+  {
+    "invoiceNumber": "INV-70589002",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:23:09.014Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:23:09.014Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:23:09.014Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:23:09.014Z"
+  },
+  {
+    "invoiceNumber": "INV-70393365",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:19:53.377Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:19:53.377Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:19:53.377Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:19:53.377Z"
+  },
+  {
+    "invoiceNumber": "INV-70247026",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:17:27.045Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:17:27.045Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:17:27.045Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:17:27.045Z"
+  },
+  {
+    "invoiceNumber": "INV-70017977",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:13:37.987Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:13:37.987Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:13:37.987Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:13:37.987Z"
+  },
+  {
+    "invoiceNumber": "INV-69789097",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "2K960481BU277324J",
+      "captureId": "3E897958PB9922108",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:10:12.084Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:10:12.084Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:10:12.084Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:10:12.084Z"
+  },
+  {
+    "invoiceNumber": "INV-69382969",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "wallet",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:03:02.997Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T03:03:02.997Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:03:02.997Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:03:02.997Z"
+  },
+  {
+    "invoiceNumber": "INV-69351932",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T03:02:31.942Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T03:02:31.942Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T03:02:31.942Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T03:02:31.942Z"
+  },
+  {
+    "invoiceNumber": "INV-69090224",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:58:10.236Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:58:10.237Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:58:10.237Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:58:10.237Z"
+  },
+  {
+    "invoiceNumber": "INV-68943674",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "4PL68183SV496835M",
+      "captureId": "82P29590J4923830E",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:56:00.852Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:56:00.852Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:56:00.852Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:56:00.852Z"
+  },
+  {
+    "invoiceNumber": "INV-68833668",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "9T268042JR643931F",
+      "captureId": "4AE30053SL829741C",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:55:03.821Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:55:03.821Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:55:03.821Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:55:03.821Z"
+  },
+  {
+    "invoiceNumber": "INV-68757011",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:52:37.023Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:52:37.024Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:52:37.024Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:52:37.024Z"
+  },
+  {
+    "invoiceNumber": "INV-68603834",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:50:03.848Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:50:03.848Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:50:03.848Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:50:03.848Z"
+  },
+  {
+    "invoiceNumber": "INV-68427751",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:47:07.761Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:47:07.761Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:47:07.761Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:47:07.761Z"
+  },
+  {
+    "invoiceNumber": "INV-68384435",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "wallet",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:46:24.451Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:46:24.451Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:46:24.451Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:46:24.451Z"
+  },
+  {
+    "invoiceNumber": "INV-68221488",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "wallet",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:43:41.510Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:43:41.510Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:43:41.511Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:43:41.511Z"
+  },
+  {
+    "invoiceNumber": "INV-68175214",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:42:55.224Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:42:55.224Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:42:55.224Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:42:55.224Z"
+  },
+  {
+    "invoiceNumber": "INV-67829568",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "2TJ162277F4974408",
+      "captureId": "72G72879GM157644R",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:37:47.311Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:37:47.311Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:37:47.311Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:37:47.311Z"
+  },
+  {
+    "invoiceNumber": "INV-67784077",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:36:24.088Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:36:24.088Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:36:24.088Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-28T02:36:24.088Z"
+  },
+  {
+    "invoiceNumber": "INV-67633276",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "cash",
+      "cardLast4": null
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:33:53.285Z",
+    "paymentStatus": "Cash on Delivery",
+    "paymentUpdatedAt": "2026-01-28T02:33:53.285Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:33:53.285Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-28T02:33:53.285Z"
+  },
+  {
+    "invoiceNumber": "INV-67459280",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "9BV017506P262762Y",
+      "captureId": "8J33422864924105A",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:31:30.633Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:31:30.633Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:31:30.633Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-28T02:31:30.633Z"
+  },
+  {
+    "invoiceNumber": "INV-67257617",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "80F39101FH338550N",
+      "captureId": "1FL59384D5656351H",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:27:53.363Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:27:53.363Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:27:53.363Z",
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 1,
+        "price": 1.8,
+        "subtotal": 1.8
+      }
+    ],
+    "subtotal": 1.8,
+    "gst": 0.16,
+    "shipping": 7,
+    "total": 8.96,
+    "placedAt": "2026-01-28T02:27:53.363Z"
+  },
+  {
+    "invoiceNumber": "INV-67210215",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "5KR39202AF893091Y",
+      "captureId": "95F91803GC1155219",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:27:07.481Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:27:07.481Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:27:07.481Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-28T02:27:07.481Z"
+  },
+  {
+    "invoiceNumber": "INV-66977063",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "7VE97655EV4368816",
+      "captureId": "5U402924XM789570H",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:23:10.896Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:23:10.896Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:23:10.896Z",
+    "cartItems": [
+      {
+        "id": "4",
+        "name": "Bread",
+        "quantity": 1,
+        "price": 1.8,
+        "subtotal": 1.8
+      }
+    ],
+    "subtotal": 1.8,
+    "gst": 0.16,
+    "shipping": 7,
+    "total": 8.96,
+    "placedAt": "2026-01-28T02:23:10.896Z"
+  },
+  {
+    "invoiceNumber": "INV-66494467",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "26K86550HR392220N",
+      "captureId": "9X8441472P940303X",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:15:22.047Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:15:22.047Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:15:22.047Z",
+    "cartItems": [
+      {
+        "id": "14",
+        "name": "Tomatoes",
+        "quantity": 1,
+        "price": 1.5,
+        "subtotal": 1.5
+      }
+    ],
+    "subtotal": 1.5,
+    "gst": 0.14,
+    "shipping": 7,
+    "total": 8.64,
+    "placedAt": "2026-01-28T02:15:22.047Z"
+  },
+  {
+    "invoiceNumber": "INV-66050730",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "3TJ460065H939153E",
+      "captureId": "1Y473315YT925771H",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:07:57.933Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:07:57.933Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:07:57.933Z",
+    "cartItems": [
+      {
+        "id": "3",
+        "name": "Milk",
+        "quantity": 1,
+        "price": 3.5,
+        "subtotal": 3.5
+      }
+    ],
+    "subtotal": 3.5,
+    "gst": 0.32,
+    "shipping": 7,
+    "total": 10.82,
+    "placedAt": "2026-01-28T02:07:57.933Z"
+  },
+  {
+    "invoiceNumber": "INV-65739403",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "paypal"
+    },
+    "paynow": null,
+    "paypal": {
+      "orderId": "30U25524CU310280K",
+      "captureId": "3T003295DF387900X",
+      "status": "COMPLETED",
+      "payerEmail": "sb-egnay48621148@personal.example.com"
+    },
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-28T02:02:44.906Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-28T02:02:44.906Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-28T02:02:44.906Z",
+    "cartItems": [
+      {
+        "id": "3",
+        "name": "Milk",
+        "quantity": 1,
+        "price": 3.5,
+        "subtotal": 3.5
+      }
+    ],
+    "subtotal": 3.5,
+    "gst": 0.32,
+    "shipping": 7,
+    "total": 10.82,
+    "placedAt": "2026-01-28T02:02:44.906Z"
+  },
+  {
+    "invoiceNumber": "INV-16920201",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "nets"
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-27T12:29:06.343Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-27T12:29:06.343Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-27T12:29:06.343Z",
+    "cartItems": [
+      {
+        "id": "2",
+        "name": "Bananas",
+        "quantity": 1,
+        "price": 0.8,
+        "subtotal": 0.8
+      }
+    ],
+    "subtotal": 0.8,
+    "gst": 0.07,
+    "shipping": 7,
+    "total": 7.87,
+    "placedAt": "2026-01-27T12:29:06.343Z"
+  },
+  {
+    "invoiceNumber": "INV-16803221",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "nets"
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-27T12:26:49.700Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-27T12:26:49.700Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-27T12:26:49.700Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-27T12:26:49.700Z"
+  },
+  {
+    "invoiceNumber": "INV-16449196",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "nets"
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-27T12:21:10.131Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-27T12:21:10.131Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-27T12:21:10.131Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-27T12:21:10.131Z"
+  },
+  {
+    "invoiceNumber": "INV-16044954",
+    "customer": {
+      "fullName": "winnie chu",
+      "email": "winnie@gmail.com",
+      "address": "cck453 avenue 4",
+      "paymentMethod": "nets"
+    },
+    "paynow": null,
+    "paypal": null,
+    "status": "Processing",
+    "statusUpdatedAt": "2026-01-27T12:14:17.591Z",
+    "paymentStatus": "Paid",
+    "paymentUpdatedAt": "2026-01-27T12:14:17.591Z",
+    "shippingStatus": "Processing",
+    "shippingUpdatedAt": "2026-01-27T12:14:17.591Z",
+    "cartItems": [
+      {
+        "id": "19",
+        "name": "Broccoli",
+        "quantity": 1,
+        "price": 5,
+        "subtotal": 5
+      }
+    ],
+    "subtotal": 5,
+    "gst": 0.45,
+    "shipping": 7,
+    "total": 12.45,
+    "placedAt": "2026-01-27T12:14:17.591Z"
+  },
+  {
     "invoiceNumber": "INV-95304757",
     "customer": {
       "fullName": "winnie chu",
@@ -136,834 +1664,5 @@
     "shipping": 7,
     "total": 12.45,
     "placedAt": "2026-01-27T05:31:45.083Z"
-  },
-  {
-    "invoiceNumber": "INV-91782744",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "nets"
-    },
-    "paynow": null,
-    "paypal": null,
-    "status": "Processing",
-    "statusUpdatedAt": "2026-01-27T05:30:08.963Z",
-    "paymentStatus": "Paid",
-    "paymentUpdatedAt": "2026-01-27T05:30:08.963Z",
-    "shippingStatus": "Processing",
-    "shippingUpdatedAt": "2026-01-27T05:30:08.963Z",
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "gst": 0.45,
-    "shipping": 7,
-    "total": 12.45,
-    "placedAt": "2026-01-27T05:30:08.963Z"
-  },
-  {
-    "invoiceNumber": "INV-61976894",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "nets"
-    },
-    "paynow": null,
-    "paypal": null,
-    "status": "Cancelled",
-    "statusUpdatedAt": "2026-01-21T02:21:37.177Z",
-    "paymentStatus": "Paid",
-    "paymentUpdatedAt": "2026-01-21T02:20:14.953Z",
-    "shippingStatus": "Cancelled",
-    "shippingUpdatedAt": "2026-01-21T02:21:37.177Z",
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 2,
-        "price": 5,
-        "subtotal": 10
-      }
-    ],
-    "subtotal": 10,
-    "gst": 0.9,
-    "shipping": 7,
-    "total": 17.9,
-    "placedAt": "2026-01-21T02:20:14.953Z"
-  },
-  {
-    "invoiceNumber": "INV-21437648",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "paypal"
-    },
-    "paynow": null,
-    "paypal": {
-      "orderId": "4JB81593AW543183R",
-      "captureId": "3CL84966EE3060117",
-      "status": "COMPLETED",
-      "payerEmail": "sb-egnay48621148@personal.example.com"
-    },
-    "status": "Delivered",
-    "statusUpdatedAt": "2026-01-20T15:05:59.602Z",
-    "paymentStatus": "Paid",
-    "paymentUpdatedAt": "2026-01-20T15:05:29.056Z",
-    "shippingStatus": "Delivered",
-    "shippingUpdatedAt": "2026-01-20T15:05:59.602Z",
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "gst": 0.45,
-    "shipping": 7,
-    "total": 12.45,
-    "placedAt": "2026-01-20T15:05:29.056Z"
-  },
-  {
-    "invoiceNumber": "INV-18170205",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "applepay",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "paypal": null,
-    "status": "Cancelled",
-    "statusUpdatedAt": "2026-01-20T15:02:49.887Z",
-    "cartItems": [
-      {
-        "id": "3",
-        "name": "Milk",
-        "quantity": 1,
-        "price": 3.5,
-        "subtotal": 3.5
-      }
-    ],
-    "subtotal": 3.5,
-    "gst": 0.32,
-    "shipping": 7,
-    "total": 10.82,
-    "placedAt": "2026-01-20T14:09:30.218Z",
-    "shippingStatus": "Cancelled",
-    "shippingUpdatedAt": "2026-01-20T15:02:49.887Z"
-  },
-  {
-    "invoiceNumber": "INV-01387844",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "paynow",
-      "cardLast4": null
-    },
-    "paynow": {
-      "reference": "INV-01387844",
-      "amount": "12.45",
-      "payload": "PAYNOW|INV:INV-01387844|AMT:12.45|NAME:winnie chu|EMAIL:winnie@gmail.com"
-    },
-    "paypal": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "gst": 0.45,
-    "shipping": 7,
-    "total": 12.45,
-    "placedAt": "2026-01-19T05:43:07.852Z",
-    "shippingStatus": "Cancelled",
-    "shippingUpdatedAt": "2026-01-20T15:02:46.773Z",
-    "status": "Cancelled",
-    "statusUpdatedAt": "2026-01-20T15:02:46.774Z"
-  },
-  {
-    "invoiceNumber": "INV-01141448",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "paynow",
-      "cardLast4": null
-    },
-    "paynow": {
-      "reference": "INV-01141448",
-      "amount": "17.90",
-      "payload": "PAYNOW|INV:INV-01141448|AMT:17.90|NAME:winnie chu|EMAIL:winnie@gmail.com"
-    },
-    "paypal": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 2,
-        "price": 5,
-        "subtotal": 10
-      }
-    ],
-    "subtotal": 10,
-    "gst": 0.9,
-    "shipping": 7,
-    "total": 17.9,
-    "placedAt": "2026-01-19T05:39:01.459Z",
-    "shippingStatus": "Delivered",
-    "shippingUpdatedAt": "2026-01-20T15:03:07.149Z",
-    "status": "Delivered",
-    "statusUpdatedAt": "2026-01-20T15:03:07.149Z"
-  },
-  {
-    "invoiceNumber": "INV-99549992",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "paypal"
-    },
-    "paynow": null,
-    "paypal": {
-      "orderId": "40G819018C284560P",
-      "captureId": "21M11912SF271704R",
-      "status": "COMPLETED",
-      "payerEmail": "sb-egnay48621148@personal.example.com"
-    },
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 3,
-        "price": 5,
-        "subtotal": 15
-      },
-      {
-        "id": "14",
-        "name": "Tomatoes",
-        "quantity": 1,
-        "price": 1.5,
-        "subtotal": 1.5
-      },
-      {
-        "id": "2",
-        "name": "Bananas",
-        "quantity": 1,
-        "price": 0.8,
-        "subtotal": 0.8
-      }
-    ],
-    "subtotal": 17.3,
-    "gst": 1.56,
-    "shipping": 7,
-    "total": 25.86,
-    "placedAt": "2026-01-19T05:15:57.975Z"
-  },
-  {
-    "invoiceNumber": "INV-63315726",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "cck453 avenue 4",
-      "paymentMethod": "cash",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "gst": 0.45,
-    "shipping": 7,
-    "total": 12.45,
-    "placedAt": "2025-12-04T15:48:35.746Z",
-    "shippingStatus": "Delivered",
-    "shippingUpdatedAt": "2026-01-20T15:03:04.097Z",
-    "status": "Delivered",
-    "statusUpdatedAt": "2026-01-20T15:03:04.097Z"
-  },
-  {
-    "invoiceNumber": "INV-35756496",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 6,
-        "price": 5,
-        "subtotal": 30
-      },
-      {
-        "id": "3",
-        "name": "Milk",
-        "quantity": 10,
-        "price": 3.5,
-        "subtotal": 35
-      }
-    ],
-    "subtotal": 65,
-    "gst": 5.85,
-    "shipping": 0,
-    "total": 70.85,
-    "placedAt": "2025-12-04T08:09:16.516Z",
-    "status": "Delivered",
-    "shippingStatus": "Delivered",
-    "shippingUpdatedAt": "2026-01-20T15:03:00.178Z",
-    "statusUpdatedAt": "2026-01-20T15:03:00.178Z"
-  },
-  {
-    "invoiceNumber": "INV-10997063",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "applepay",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 21,
-        "price": 12.32,
-        "subtotal": 258.72
-      }
-    ],
-    "subtotal": 258.72,
-    "gst": 23.28,
-    "shipping": 0,
-    "total": 282,
-    "placedAt": "2025-12-04T01:16:37.067Z"
-  },
-  {
-    "invoiceNumber": "INV-10558958",
-    "customer": {
-      "fullName": "winnie chu",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "4",
-        "name": "Bread",
-        "quantity": 1,
-        "price": 1.8,
-        "subtotal": 1.8
-      }
-    ],
-    "subtotal": 1.8,
-    "gst": 0.16,
-    "shipping": 7,
-    "total": 8.96,
-    "placedAt": "2025-12-04T01:09:18.965Z"
-  },
-  {
-    "invoiceNumber": "INV-79889966",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "applepay",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      }
-    ],
-    "subtotal": 12.32,
-    "gst": 1.11,
-    "shipping": 7,
-    "total": 20.43,
-    "placedAt": "2025-12-03T16:38:09.969Z",
-    "status": "Paid"
-  },
-  {
-    "invoiceNumber": "INV-79836039",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      },
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 17.32,
-    "gst": 1.56,
-    "shipping": 7,
-    "total": 25.88,
-    "placedAt": "2025-12-03T16:37:16.057Z",
-    "status": "Cash on Delivery"
-  },
-  {
-    "invoiceNumber": "INV-78258471",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "gst": 0.45,
-    "shipping": 7,
-    "total": 12.45,
-    "placedAt": "2025-12-03T16:10:58.479Z",
-    "status": "Delivered"
-  },
-  {
-    "invoiceNumber": "INV-55267170",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "9999"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "4",
-        "name": "Bread",
-        "quantity": 1,
-        "price": 1.8,
-        "subtotal": 1.8
-      }
-    ],
-    "subtotal": 1.8,
-    "gst": 0.16,
-    "shipping": 7,
-    "total": 8.96,
-    "placedAt": "2025-12-03T09:47:47.178Z"
-  },
-  {
-    "invoiceNumber": "INV-55121969",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "1111"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      }
-    ],
-    "subtotal": 12.32,
-    "gst": 1.11,
-    "shipping": 7,
-    "total": 20.43,
-    "placedAt": "2025-12-03T09:45:21.984Z",
-    "status": "Delivered"
-  },
-  {
-    "invoiceNumber": "INV-55008689",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "2",
-        "name": "Bananas",
-        "quantity": 1,
-        "price": 0.8,
-        "subtotal": 0.8
-      }
-    ],
-    "subtotal": 0.8,
-    "gst": 0.07,
-    "shipping": 7,
-    "total": 7.87,
-    "placedAt": "2025-12-03T09:43:28.692Z",
-    "status": "Paid"
-  },
-  {
-    "invoiceNumber": "INV-54854021",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "5432"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "1",
-        "name": "Apples",
-        "quantity": 1,
-        "price": 1.5,
-        "subtotal": 1.5
-      }
-    ],
-    "subtotal": 1.5,
-    "gst": 0.14,
-    "shipping": 7,
-    "total": 8.64,
-    "placedAt": "2025-12-03T09:40:54.037Z",
-    "status": "Paid"
-  },
-  {
-    "invoiceNumber": "INV-54442553",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "2",
-        "name": "Bananas",
-        "quantity": 1,
-        "price": 0.8,
-        "subtotal": 0.8
-      }
-    ],
-    "subtotal": 0.8,
-    "gst": 0.07,
-    "shipping": 7,
-    "total": 7.87,
-    "placedAt": "2025-12-03T09:34:02.555Z"
-  },
-  {
-    "invoiceNumber": "INV-54368916",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "2123"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      },
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      }
-    ],
-    "subtotal": 17.32,
-    "gst": 1.56,
-    "shipping": 7,
-    "total": 25.88,
-    "placedAt": "2025-12-03T09:32:48.941Z"
-  },
-  {
-    "invoiceNumber": "INV-53062125",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7654"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 3,
-        "price": 5,
-        "subtotal": 15
-      }
-    ],
-    "subtotal": 15,
-    "gst": 1.35,
-    "shipping": 7,
-    "total": 23.35,
-    "placedAt": "2025-12-03T09:11:02.140Z"
-  },
-  {
-    "invoiceNumber": "INV-40822181",
-    "customer": {
-      "fullName": "sarahlee",
-      "email": "sarahlee@gmail.com",
-      "address": "Woodlands",
-      "paymentMethod": "card",
-      "cardLast4": "3456"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "14",
-        "name": "Tomatoes",
-        "quantity": 6,
-        "price": 1.5,
-        "subtotal": 9
-      },
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      }
-    ],
-    "subtotal": 21.32,
-    "gst": 1.92,
-    "shipping": 7,
-    "total": 30.240000000000002,
-    "placedAt": "2025-12-03T05:47:02.213Z"
-  },
-  {
-    "invoiceNumber": "INV-40035234",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "7777"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 1,
-        "price": 12.32,
-        "subtotal": 12.32
-      }
-    ],
-    "subtotal": 12.32,
-    "gst": 1.11,
-    "shipping": 7,
-    "total": 20.43,
-    "placedAt": "2025-12-03T05:33:55.241Z"
-  },
-  {
-    "invoiceNumber": "INV-32158828",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "card",
-      "cardLast4": "1231"
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "22",
-        "name": "cheese",
-        "quantity": 2,
-        "price": 12.32,
-        "subtotal": 24.64
-      },
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 12,
-        "price": 5,
-        "subtotal": 60
-      }
-    ],
-    "subtotal": 84.64,
-    "gst": 7.62,
-    "shipping": 0,
-    "total": 92.26,
-    "placedAt": "2025-12-03T03:22:38.839Z",
-    "status": "Cancelled"
-  },
-  {
-    "invoiceNumber": "INV-28596072",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "paynow",
-      "cardLast4": null
-    },
-    "paynow": {
-      "reference": "INV-28596072",
-      "amount": "8.64",
-      "payload": "PAYNOW|INV:INV-28596072|AMT:8.64|NAME:winnie|EMAIL:winnie@gmail.com"
-    },
-    "cartItems": [
-      {
-        "id": "14",
-        "name": "Tomatoes",
-        "quantity": 1,
-        "price": 1.5,
-        "subtotal": 1.5
-      }
-    ],
-    "subtotal": 1.5,
-    "gst": 0.14,
-    "shipping": 7,
-    "total": 8.64,
-    "placedAt": "2025-12-03T02:23:16.077Z"
-  },
-  {
-    "invoiceNumber": "INV-28099936",
-    "customer": {
-      "fullName": "winnie",
-      "email": "winnie@gmail.com",
-      "address": "Blk 453 Choa Chu Kang Ave 4",
-      "paymentMethod": "paynow",
-      "cardLast4": null
-    },
-    "paynow": {
-      "reference": "INV-28099936",
-      "amount": "15.72",
-      "payload": "PAYNOW|INV:INV-28099936|AMT:15.72|NAME:winnie|EMAIL:winnie@gmail.com"
-    },
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      },
-      {
-        "id": "14",
-        "name": "Tomatoes",
-        "quantity": 2,
-        "price": 1.5,
-        "subtotal": 3
-      }
-    ],
-    "subtotal": 8,
-    "gst": 0.72,
-    "shipping": 7,
-    "total": 15.72,
-    "placedAt": "2025-12-03T02:14:59.951Z"
-  },
-  {
-    "invoiceNumber": "INV-87501928",
-    "customer": {
-      "fullName": "sarahlee",
-      "email": "sarahlee@gmail.com",
-      "address": "woodlands ",
-      "paymentMethod": "applepay",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "4",
-        "name": "Bread",
-        "quantity": 10,
-        "price": 1.8,
-        "subtotal": 18
-      }
-    ],
-    "subtotal": 18,
-    "gst": 1.62,
-    "shipping": 0,
-    "total": 19.62,
-    "placedAt": "2025-12-02T14:58:21.942Z"
-  },
-  {
-    "invoiceNumber": "INV-58613609",
-    "customer": {
-      "fullName": "sarahlee",
-      "email": "sarahlee@gmail.com",
-      "address": "woodlands ",
-      "paymentMethod": "applepay",
-      "cardLast4": null
-    },
-    "paynow": null,
-    "cartItems": [
-      {
-        "id": "19",
-        "name": "Broccoli",
-        "quantity": 1,
-        "price": 5,
-        "subtotal": 5
-      }
-    ],
-    "subtotal": 5,
-    "shipping": 0,
-    "total": 5,
-    "placedAt": "2025-12-01T03:10:13.616Z"
   }
 ]

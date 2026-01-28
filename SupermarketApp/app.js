@@ -24,6 +24,7 @@ const CartController = require('./controllers/cartcontroller');
 const CheckoutController = require('./controllers/checkoutcontroller');
 const WalletController = require('./controllers/walletcontroller');
 const Wallet = require('./models/wallet');
+const User = require('./models/User');
 
 // Body parsers
 app.use(express.urlencoded({ extended: true }));
@@ -44,10 +45,12 @@ const sessionStore = new MySQLStore({
   checkExpirationInterval: 15 * 60 * 1000, // 15 minutes
   expiration: 24 * 60 * 60 * 1000 // 1 day
 });
-// Clear any persisted sessions on server start so users must log in after a restart
-sessionStore.clear((err) => {
-  if (err) console.error('Failed to clear session store on startup:', err);
-});
+// Clear persisted sessions only when explicitly requested (avoids logging users out on reload)
+if (process.env.CLEAR_SESSIONS_ON_START === 'true') {
+  sessionStore.clear((err) => {
+    if (err) console.error('Failed to clear session store on startup:', err);
+  });
+}
 
 app.use(session({
   secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
@@ -79,6 +82,33 @@ app.use((req, res, next) => {
       req.session.cart = [];
     }
   }
+  if (!req.session.user && req.session.lastOrder && req.session.lastOrder.customer && req.session.lastOrder.customer.email) {
+    const email = String(req.session.lastOrder.customer.email || '').trim();
+    if (email) {
+      return User.findByEmail(email, (err, user) => {
+        if (err) console.error('Auto-restore user from last order failed:', err);
+        if (user) {
+          req.session.user = user;
+          res.locals.user = user;
+          return req.session.save(() => {
+            if (req.session.user && req.session.user.id) {
+              return Wallet.getBalance(req.session.user.id, (walletErr, balance) => {
+                if (walletErr) {
+                  console.error('Wallet balance load failed:', walletErr);
+                  res.locals.walletBalance = 0;
+                } else {
+                  res.locals.walletBalance = Number(balance) || 0;
+                }
+                next();
+              });
+            }
+            return next();
+          });
+        }
+        return next();
+      });
+    }
+  }
   if (req.session.user && req.session.user.id) {
     return Wallet.getBalance(req.session.user.id, (err, balance) => {
       if (err) {
@@ -100,6 +130,33 @@ function checkAuthenticated(req, res, next) {
     return res.redirect('/login');
   }
   next();
+}
+function checkInvoiceAccess(req, res, next) {
+  if (req.session.user) return next();
+  if (!req.session.lastOrder && req.session.paypalInvoiceSnapshot) {
+    req.session.lastOrder = req.session.paypalInvoiceSnapshot;
+  }
+  const lastOrder = req.session.lastOrder;
+  if (lastOrder && Array.isArray(lastOrder.cartItems) && lastOrder.cartItems.length) {
+    return next();
+  }
+  req.flash('error', 'Please log in');
+  return res.redirect('/login');
+}
+function checkOrderAccess(req, res, next) {
+  if (req.session.user) return next();
+  const invoice = req.params.invoice;
+  const lastOrder = req.session.lastOrder;
+  if (lastOrder && String(lastOrder.invoiceNumber) === String(invoice)) {
+    return next();
+  }
+  const history = Array.isArray(req.session.orderHistory) ? req.session.orderHistory : [];
+  const hasHistory = history.some((order) => order && String(order.invoiceNumber) === String(invoice));
+  if (hasHistory) {
+    return next();
+  }
+  req.flash('error', 'Please log in');
+  return res.redirect('/login');
 }
 function checkAdmin(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'admin') {
@@ -272,11 +329,13 @@ app.get('/checkout', checkAuthenticated, ensureFn(CheckoutController.renderCheck
 app.post('/checkout', checkAuthenticated, ensureFn(CheckoutController.processCheckout, 'CheckoutController.processCheckout'));
 app.post('/checkout/paypal/order', checkAuthenticated, ensureFn(CheckoutController.createPayPalOrder, 'CheckoutController.createPayPalOrder'));
 app.post('/checkout/paypal/capture', checkAuthenticated, ensureFn(CheckoutController.capturePayPalOrder, 'CheckoutController.capturePayPalOrder'));
+app.get('/paypal/success', ensureFn(CheckoutController.renderPayPalSuccess, 'CheckoutController.renderPayPalSuccess'));
+app.get('/paypal/invoice', ensureFn(CheckoutController.redirectToInvoiceAfterPayPal, 'CheckoutController.redirectToInvoiceAfterPayPal'));
 app.get('/paynow', checkAuthenticated, ensureFn(CheckoutController.renderPayNow, 'CheckoutController.renderPayNow'));
-app.get('/invoice', checkAuthenticated, ensureFn(CheckoutController.renderInvoice, 'CheckoutController.renderInvoice'));
+app.get('/invoice', checkInvoiceAccess, ensureFn(CheckoutController.renderInvoice, 'CheckoutController.renderInvoice'));
 app.get('/orders', checkAuthenticated, ensureFn(CheckoutController.renderOrderHistory, 'CheckoutController.renderOrderHistory'));
-app.get('/orders/:invoice', checkAuthenticated, ensureFn(CheckoutController.viewOrderFromHistory, 'CheckoutController.viewOrderFromHistory'));
-app.get('/orders/:invoice/track', checkAuthenticated, ensureFn(CheckoutController.renderOrderTracking, 'CheckoutController.renderOrderTracking'));
+app.get('/orders/:invoice', checkInvoiceAccess, ensureFn(CheckoutController.viewOrderFromHistory, 'CheckoutController.viewOrderFromHistory'));
+app.get('/orders/:invoice/track', ensureFn(CheckoutController.renderOrderTracking, 'CheckoutController.renderOrderTracking'));
 app.get('/orders/:invoice/cancel', checkAuthenticated, ensureFn(CheckoutController.renderCancelOrderPage, 'CheckoutController.renderCancelOrderPage'));
 app.post('/orders/:invoice/cancel', checkAuthenticated, ensureFn(CheckoutController.cancelOrderForUser, 'CheckoutController.cancelOrderForUser'));
 

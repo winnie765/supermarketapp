@@ -93,6 +93,19 @@ function getRecentOrders(limit = 5) {
   return unique.slice(0, safeLimit);
 }
 
+function findOrderByInvoice(invoice, user, sessionHistory, sessionLastOrder) {
+  const invoiceKey = String(invoice || '');
+  if (!invoiceKey) return null;
+  if (sessionLastOrder && String(sessionLastOrder.invoiceNumber) === invoiceKey) {
+    return sessionLastOrder;
+  }
+  const orders = mergeOrdersForUser(user, sessionHistory);
+  let order = orders.find((o) => String(o.invoiceNumber) === invoiceKey);
+  if (order) return order;
+  order = globalOrderFeed.find((o) => String(o.invoiceNumber) === invoiceKey);
+  return order || null;
+}
+
 function setOrderStatus(orderKey, status, kind = 'shipping') {
   if (!orderKey) return false;
   const target = String(orderKey).toLowerCase();
@@ -234,9 +247,14 @@ function completeCheckout(req, res, { cartItems, totals, invoiceNumber, customer
   persistOrder(req, orderRecord);
   req.flash('success', `Order placed! An invoice has been generated for ${customer.email}.`);
 
-  const redirectUrl = customer.paymentMethod === 'paynow' ? '/paynow' : '/invoice';
-  if (customer.paymentMethod === 'paynow') {
+  const isPayNow = customer.paymentMethod === 'paynow';
+  const isPayPal = customer.paymentMethod === 'paypal';
+  const redirectUrl = isPayNow ? '/paynow' : (isPayPal ? '/paypal/success' : '/invoice');
+  if (isPayNow) {
     req.session.pendingPayNow = true;
+  }
+  if (isPayPal) {
+    req.session.pendingPayPalSuccess = true;
   }
 
   return req.session.save(() => {
@@ -665,11 +683,55 @@ function renderPayNow(req, res) {
   });
 }
 
+function renderPayPalSuccess(req, res) {
+  const order = req.session.lastOrder;
+  if (!order || !order.cartItems || !order.cartItems.length) {
+    req.flash('error', 'No PayPal order found. Please checkout again.');
+    return res.redirect('/checkout');
+  }
+  if (order.customer.paymentMethod !== 'paypal') {
+    return res.redirect('/invoice');
+  }
+  if (!req.session.pendingPayPalSuccess) {
+    return res.redirect('/invoice');
+  }
+  req.session.pendingPayPalSuccess = false;
+  req.session.paypalInvoiceSnapshot = order;
+  return req.session.save((saveErr) => {
+    if (saveErr) {
+      console.error('Failed to save PayPal success session state:', saveErr);
+    }
+    res.render('paypalSuccess', {
+      order,
+      message: 'Payment Successful'
+    });
+  });
+}
+
+function redirectToInvoiceAfterPayPal(req, res) {
+  const order = req.session.lastOrder || req.session.paypalInvoiceSnapshot;
+  if (!order || !order.cartItems || !order.cartItems.length || order.customer?.paymentMethod !== 'paypal') {
+    req.flash('error', 'No PayPal invoice found. Please checkout again.');
+    return res.redirect('/checkout');
+  }
+  req.session.lastOrder = order;
+  req.session.paypalInvoiceSnapshot = order;
+  return req.session.save((saveErr) => {
+    if (saveErr) {
+      console.error('Failed to persist invoice redirect session state:', saveErr);
+    }
+    res.redirect('/invoice');
+  });
+}
+
 function renderInvoice(req, res) {
   const order = req.session.lastOrder;
   if (!order || !order.cartItems || !order.cartItems.length) {
     req.flash('error', 'No recent order found. Complete a checkout first.');
     return res.redirect('/cart');
+  }
+  if (req.session.paypalInvoiceSnapshot && req.session.paypalInvoiceSnapshot.invoiceNumber === order.invoiceNumber) {
+    req.session.paypalInvoiceSnapshot = null;
   }
   if (order.customer.paymentMethod === 'paynow' && !order.paynow) {
     order.paynow = buildPayNowPayload({ invoiceNumber: order.invoiceNumber, total: order.total, customer: order.customer });
@@ -721,11 +783,11 @@ function renderOrderHistory(req, res) {
 }
 
 function viewOrderFromHistory(req, res) {
-  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
-  const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
+  const invoiceParam = String(req.params.invoice || '');
+  let order = findOrderByInvoice(invoiceParam, req.session.user, req.session.orderHistory, req.session.lastOrder);
   if (!order) {
     req.flash('error', 'Order not found in your history.');
-    return res.redirect('/orders');
+    return res.redirect('/invoice');
   }
   req.session.lastOrder = order;
   req.session.pendingPayNow = false;
@@ -733,11 +795,11 @@ function viewOrderFromHistory(req, res) {
 }
 
 function renderOrderTracking(req, res) {
-  const orders = mergeOrdersForUser(req.session.user, req.session.orderHistory);
-  const order = orders.find((o) => String(o.invoiceNumber) === String(req.params.invoice));
+  const invoiceParam = String(req.params.invoice || '');
+  let order = findOrderByInvoice(invoiceParam, req.session.user, req.session.orderHistory, req.session.lastOrder);
   if (!order) {
     req.flash('error', 'Order not found in your history.');
-    return res.redirect('/orders');
+    return res.redirect('/invoice');
   }
   return res.render('orderTracking', {
     user: req.session.user,
@@ -791,6 +853,8 @@ module.exports = {
   renderCheckout,
   processCheckout,
   renderPayNow,
+  renderPayPalSuccess,
+  redirectToInvoiceAfterPayPal,
   renderInvoice,
   renderOrderHistory,
   viewOrderFromHistory,

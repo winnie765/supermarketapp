@@ -19,7 +19,7 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
               <div>
                 <h2 class="mb-1">Wallet</h2>
-                <p class="text-muted mb-0">Top up your balance with a credit/debit card.</p>
+                <p class="text-muted mb-0">Top up your balance with PayPal or NETS QR.</p>
               </div>
               <div class="text-end">
                 <div class="text-muted small">Current balance</div>
@@ -34,26 +34,35 @@
               <div class="alert alert-success"><% messages.success.forEach(function(msg){ %><div><%= msg %></div><% }); %></div>
             <% } %>
 
-            <form action="/wallet/topup" method="post" class="row g-3">
+            <form action="/wallet/topup" method="post" class="row g-3" id="wallet-topup-form">
               <div class="col-12">
                 <label class="form-label">Top-up Amount (SGD)</label>
                 <input type="number" name="amount" class="form-control" min="1" step="0.01" inputmode="decimal" placeholder="e.g. 20.00" required>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">Cardholder Name</label>
-                <input type="text" name="cardName" class="form-control" placeholder="Name on card" required>
+              <div class="col-12">
+                <label class="form-label">Payment Method</label>
+                <div class="d-flex flex-column gap-2">
+                  <% if (paypalClientId) { %>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="walletPayPaypal" value="paypal" checked>
+                      <label class="form-check-label" for="walletPayPaypal">PayPal</label>
+                    </div>
+                  <% } %>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="walletPayNets" value="nets" <%= paypalClientId ? '' : 'checked' %>>
+                    <label class="form-check-label" for="walletPayNets">NETS QR</label>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">Card Number</label>
-                <input type="text" name="cardNumber" class="form-control" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Expiry (MM/YY)</label>
-                <input type="text" name="cardExpiry" class="form-control" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">CVV</label>
-                <input type="password" name="cardCvv" class="form-control" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="3" required>
+              <% if (paypalClientId) { %>
+                <div id="wallet-paypal-section" class="col-12" style="display: none;">
+                  <div id="wallet-paypal-error" class="alert alert-danger d-none"></div>
+                  <div id="wallet-paypal-button-container"></div>
+                  <small class="text-muted d-block mt-2">PayPal will open a secure payment window to complete your top-up.</small>
+                </div>
+              <% } %>
+              <div id="wallet-nets-section" class="col-12" style="display: none;">
+                <div class="alert alert-info mb-0">You will be redirected to a NETS QR payment page.</div>
               </div>
               <div class="col-12 d-flex justify-content-between gap-2">
                 <a href="/home" class="btn btn-lime flex-fill text-center">Back to Home</a>
@@ -80,33 +89,98 @@
         }
       });
 
-      const cardInput = document.querySelector('input[name="cardNumber"]');
-      if (cardInput) {
-        cardInput.addEventListener('input', () => {
-          const digits = cardInput.value.replace(/\D/g, '').slice(0, 16);
-          const groups = digits.match(/.{1,4}/g) || [];
-          cardInput.value = groups.join(' ');
-        });
-      }
+      const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+      const paypalSection = document.getElementById('wallet-paypal-section');
+      const netsSection = document.getElementById('wallet-nets-section');
+      const topupForm = document.getElementById('wallet-topup-form');
+      const submitBtn = topupForm ? topupForm.querySelector('button[type="submit"]') : null;
 
-      const expiryInput = document.querySelector('input[name="cardExpiry"]');
-      if (expiryInput) {
-        expiryInput.addEventListener('input', () => {
-          const digits = expiryInput.value.replace(/\D/g, '').slice(0, 4);
-          const month = digits.slice(0, 2);
-          const year = digits.slice(2, 4);
-          expiryInput.value = year.length ? `${month}/${year}` : month;
-        });
-      }
+      const togglePaymentSections = () => {
+        let method = 'card';
+        paymentRadios.forEach(r => { if (r.checked) method = r.value; });
+        if (paypalSection) paypalSection.style.display = method === 'paypal' ? 'block' : 'none';
+        if (netsSection) netsSection.style.display = method === 'nets' ? 'block' : 'none';
+        if (submitBtn) submitBtn.style.display = method === 'paypal' ? 'none' : 'inline-block';
+        if (topupForm) topupForm.action = method === 'nets' ? '/wallet/nets/start' : '/wallet/topup';
+      };
 
-      const cvvInput = document.querySelector('input[name="cardCvv"]');
-      if (cvvInput) {
-        cvvInput.addEventListener('input', () => {
-          const digits = cvvInput.value.replace(/\D/g, '').slice(0, 3);
-          cvvInput.value = digits;
-        });
-      }
+      paymentRadios.forEach(r => r.addEventListener('change', togglePaymentSections));
+      togglePaymentSections();
     })();
   </script>
+  <% if (paypalClientId) { %>
+    <script src="https://www.paypal.com/sdk/js?client-id=<%= paypalClientId %>&currency=SGD"></script>
+    <script>
+      (function() {
+        const errorBox = document.getElementById('wallet-paypal-error');
+        const buttonContainer = document.getElementById('wallet-paypal-button-container');
+        const amountInput = document.querySelector('input[name="amount"]');
+        if (!window.paypal || !buttonContainer) return;
+
+        function showPayPalError(message) {
+          if (!errorBox) return alert(message);
+          errorBox.textContent = message;
+          errorBox.classList.remove('d-none');
+        }
+
+        function clearPayPalError() {
+          if (!errorBox) return;
+          errorBox.textContent = '';
+          errorBox.classList.add('d-none');
+        }
+
+        paypal.Buttons({
+          createOrder: () => {
+            clearPayPalError();
+            const raw = amountInput ? Number(amountInput.value) : NaN;
+            if (!Number.isFinite(raw) || raw <= 0) {
+              showPayPalError('Enter a valid top-up amount before paying with PayPal.');
+              return Promise.reject(new Error('Invalid amount'));
+            }
+            return fetch('/wallet/paypal/order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ amount: raw })
+            })
+              .then(res => res.json().then(data => ({ ok: res.ok, data })))
+              .then(({ ok, data }) => {
+                if (!ok || !data || !data.id) {
+                  throw new Error((data && data.error) || 'Unable to start PayPal top-up.');
+                }
+                return data.id;
+              })
+              .catch(err => {
+                showPayPalError(err.message || 'Unable to start PayPal top-up.');
+                throw err;
+              });
+          },
+          onApprove: (data) => {
+            clearPayPalError();
+            return fetch('/wallet/paypal/capture', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ orderId: data.orderID })
+            })
+              .then(res => res.json().then(body => ({ ok: res.ok, body })))
+              .then(({ ok, body }) => {
+                if (!ok || !body || !body.redirectUrl) {
+                  throw new Error((body && body.error) || 'Unable to finalize PayPal top-up.');
+                }
+                window.location.href = body.redirectUrl;
+              })
+              .catch(err => {
+                showPayPalError(err.message || 'Unable to finalize PayPal top-up.');
+              });
+          },
+          onError: (err) => {
+            console.error('PayPal top-up error:', err);
+            showPayPalError('PayPal is unavailable right now. Please try again.');
+          }
+        }).render('#wallet-paypal-button-container');
+      })();
+    </script>
+  <% } %>
 </body>
 </html>

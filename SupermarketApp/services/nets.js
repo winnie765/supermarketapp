@@ -2,6 +2,11 @@ const axios = require("axios");
 
 exports.generateQrCode = async (req, res) => {
   const { cartTotal } = req.body;
+  const netsContext = req.netsContext || {};
+  const renderTitle = netsContext.title || "Scan to Pay";
+  const successUrl = netsContext.successUrl || "/nets-qr/success";
+  const failUrl = netsContext.failUrl || "/nets-qr/fail";
+  const cancelUrl = netsContext.cancelUrl || "/checkout";
   console.log(cartTotal);
   try {
     const requestBody = {
@@ -57,7 +62,7 @@ exports.generateQrCode = async (req, res) => {
       // Render the QR code page with required data
       res.render("netsQr", {
         total: cartTotal,
-        title: "Scan to Pay",
+        title: renderTitle,
         qrCodeUrl: `data:image/png;base64,${qrData.qr_code}`,
         txnRetrievalRef: txnRetrievalRef,
         courseInitId: courseInitId,
@@ -67,6 +72,9 @@ exports.generateQrCode = async (req, res) => {
          fullNetsResponse: response.data,
         apiKey: process.env.API_KEY,
         projectId: process.env.PROJECT_ID,
+        successUrl,
+        failUrl,
+        cancelUrl
       });
     } else {
       // Handle partial or failed responses

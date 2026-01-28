@@ -43,7 +43,7 @@
                         <hr>
                         <div class="d-flex flex-wrap gap-3 align-items-center">
                             <img src="./images/netsQrInfo.png" alt="NETS QR instructions" class="img-fluid" style="max-width: 360px;">
-                            <a href="/checkout" class="btn btn-lime btn-lg">Cancel</a>
+                            <a href="<%= typeof cancelUrl !== 'undefined' ? cancelUrl : '/checkout' %>" class="btn btn-lime btn-lg">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,8 @@
         const txnRetrievalRef = "<%= txnRetrievalRef %>"; // Transaction reference
         const courseInitId = "<%= courseInitId %>"; // Course Init ID
         const url = `/sse/payment-status/${txnRetrievalRef}`; 
+        const successUrl = "<%= typeof successUrl !== 'undefined' ? successUrl : '/nets-qr/success' %>";
+        const failUrl = "<%= typeof failUrl !== 'undefined' ? failUrl : '/nets-qr/fail' %>";
    
         const headers = {
             "api-key": "<%= apiKey %>",
@@ -83,10 +85,10 @@
             // Check for payment success
             if (data.success) {
                 if (s2sNetsTxnStatus) s2sNetsTxnStatus.close();
-                window.location.href = `/nets-qr/success?txn_retrieval_ref=${txnRetrievalRef}`;
+                window.location.href = `${successUrl}?txn_retrieval_ref=${txnRetrievalRef}`;
             } else if (data.fail) {
                 if (s2sNetsTxnStatus) s2sNetsTxnStatus.close();
-                window.location.href = `/nets-qr/fail?txn_retrieval_ref=${txnRetrievalRef}`;
+                window.location.href = `${failUrl}?txn_retrieval_ref=${txnRetrievalRef}`;
             }
         });
 
@@ -110,7 +112,7 @@
                 if (s2sNetsTxnStatus) {
                     s2sNetsTxnStatus.close();
                 }
-                window.location.href = `/nets-qr/fail?txn_retrieval_ref=${txnRetrievalRef}`; // Redirect to fail page
+                window.location.href = `${failUrl}?txn_retrieval_ref=${txnRetrievalRef}`; // Redirect to fail page
             }
         };
 

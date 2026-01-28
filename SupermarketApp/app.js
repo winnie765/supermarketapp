@@ -216,6 +216,11 @@ app.get('/profile', checkAuthenticated, ensureFn(UserController.renderProfile, '
 app.post('/profile', checkAuthenticated, ensureFn(UserController.updateProfile, 'UserController.updateProfile'));
 app.get('/wallet', checkAuthenticated, ensureFn(WalletController.renderWallet, 'WalletController.renderWallet'));
 app.post('/wallet/topup', checkAuthenticated, ensureFn(WalletController.topUpWallet, 'WalletController.topUpWallet'));
+app.post('/wallet/paypal/order', checkAuthenticated, ensureFn(WalletController.createPayPalTopUpOrder, 'WalletController.createPayPalTopUpOrder'));
+app.post('/wallet/paypal/capture', checkAuthenticated, ensureFn(WalletController.capturePayPalTopUp, 'WalletController.capturePayPalTopUp'));
+app.post('/wallet/nets/start', checkAuthenticated, ensureFn(WalletController.startNetsTopUp, 'WalletController.startNetsTopUp'));
+app.get('/wallet/nets/success', checkAuthenticated, ensureFn(WalletController.finalizeNetsTopUp, 'WalletController.finalizeNetsTopUp'));
+app.get('/wallet/nets/fail', checkAuthenticated, ensureFn(WalletController.failNetsTopUp, 'WalletController.failNetsTopUp'));
 app.get('/logout', SupermarketController.logout);
 
 app.get("/", (req, res) => { res.render("shopping") })
